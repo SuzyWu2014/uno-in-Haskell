@@ -1,0 +1,115 @@
+\documentclass[letterpaper,12pt,fleqn]{article}
+\setlength{\mathindent}{1cm}
+\usepackage{graphicx}                                        
+
+\usepackage{amssymb}                                         
+\usepackage{amsmath}                                         
+\usepackage{amsthm}                                          
+%\usepackage[center]{titlesec}
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+
+\usepackage{url}
+\usepackage{setspace}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+
+\usepackage{pstricks, pst-node}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+%the following sets the geometry of the page
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in}
+
+%\usepackage{listings}
+%\definecolor{mygreen}{rgb}{0,0.6,0}
+%\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+%\definecolor{mymauve}{rgb}{0.58,0,0.82}
+%\lstset{language=Haskell,
+%	numbers=left, 
+%	numberstyle=\tiny\color{mygray},
+%	stepnumber=5,
+%	basicstyle=\footnotesize,
+%	keywordstyle=\color{blue},
+%	commentstyle=\color{mygreen},
+%	frame=shadowbox,
+%	rulecolor=\color{black},
+%	tabsize=4,
+%	breaklines=true,
+%	stringstyle=\color{mymauve}
+%}
+%
+%\newcommand{\cred}[1]{{\color{red}#1}}
+%\newcommand{\cblue}[1]{{\color{blue}#1}}
+
+%\usepackage{textcomp}
+%\renewcommand*\rmdefault{ptm}
+
+\begin{document}
+%\begin{titlepage}
+%	\begin{center}
+%		\vspace*{\fill}
+%		\HRule \\[0.4cm]
+%		\textsc{\huge CS583 Project Proposal} \\
+%		\HRule \\[1.5cm]
+%		\LARGE \emph{Shujin Wu} \hfill \textit{932293747} \\ [0.2cm]
+%		\LARGE \emph{Yuan Zhang} \hfill \textit{932094862} \\ [0.2cm]
+%		\LARGE \emph{Yipeng Wang} \hfill \textit{931903609} \\ [0.2cm]
+%		\vspace*{\fill}
+%		\vfill
+%		{\large \today}
+%	\end{center}
+%\end{titlepage}
+
+{\noindent \huge \textsc{\centerline{CS583 Project Proposal}}} \\ \HRule \\ [0.4cm]
+\begin{minipage}{\textwidth}
+	\begin{center}
+		\large \emph{Shujin Wu} \hfill \textit{932293747}\\
+		\large \emph{Yuan Zhang} \hfill \textit{932094862}\\
+		\large \emph{Yipeng Wang} \hfill \textit{931903609}
+	\end{center}
+\end{minipage}
+
+
+\section*{Overview about The Project}
+Uno is a famous card game that is really popular in America. Uno has some simple rules to make people easily get started. Therefore, we choose this easy but interesting Uno card game as our final project. We are going to implement Uno by Haskell and the sources we learn about during the course. The users should be players. The users could act as real card game players, like drawing cards, dropping cards, passing the current round, and calling ``Uno" when someone only have one card in hand. There are many online applications where people can play Uno, and players can choose to play with friends or AIs. What we are about to implement is similar, but the difference is that users can only play with computers. Moreover, we are going to let the user to choose how many AIs in the game. \\
+\\ From this course, so far we think we will apply type classes and higher-order abstract syntax to our project. \\
+\\ For more information about Uno, please visit the website \url{https://en.wikipedia.org/wiki/Uno_(card_game)}.
+
+\section*{Concepts}
+To implement Uno in Haskell, we need to create some new type or type classes as following.
+\begin{itemize}
+\setlength{\itemsep}{0em}
+	\item Game states, including the number of cards in the deck, direction, the number of players, the current player, etc.
+	\item Players, including name, score, how many cards in hand, etc.
+	\item Cards, including name, types, colors, the number on each card, the effect of each card, etc.
+\end{itemize}
+
+
+\section*{Operations}
+There are some interesting operations to be implemented as following list.
+\begin{itemize}
+\setlength{\itemsep}{0em}
+	\item Draw cards, that let users get cards from the deck.
+	\item Drop cards, that let users play cards from hand.
+	\item Shuffle, that randomize the deck.
+	\item Pass round, that skip the current round
+	\item Match color/number, that checks if the cards users play match with the last played card in color or number.
+	\item Reverse direction, that changes the current direction inversely.
+	\item Check winner, that checks which player wins and calculates the score that the winner get.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
