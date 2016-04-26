@@ -23,7 +23,7 @@
 \geometry{textheight=9in, textwidth=6.5in}
 
 %\usepackage{listings}
-%\definecolor{mygreen}{rgb}{0,0.6,0}
+%\definecolor{mygreen}{rgb}{0,0.6,0b}
 %\definecolor{mygray}{rgb}{0.5,0.5,0.5}
 %\definecolor{mymauve}{rgb}{0.58,0,0.82}
 %\lstset{language=Haskell,
@@ -91,13 +91,33 @@ To implement Uno in Haskell, we need to create some new type or type classes as 
 There are some interesting operations to be implemented as following list.
 \begin{itemize}
 \setlength{\itemsep}{0em}
-	\item Draw cards, that let users get cards from the deck.
-	\item Drop cards, that let users play cards from hand.
-	\item Shuffle, that randomize the deck.
-	\item Pass round, that skip the current round
-	\item Match color/number, that checks if the cards users play match with the last played card in color or number.
-	\item Reverse direction, that changes the current direction inversely.
-	\item Check winner, that checks which player wins and calculates the score that the winner get.
+	\item Player Operations:
+	\begin{itemize}
+	\setlength{\itemsep}{0em}
+		\item \textbf{Draw cards:} let users get cards from the deck.
+		\item \textbf{Drop card:}  let users play cards from hand.
+		\item \textbf{Pick color:} let users to pick a color to continue when play card - Wild
+	\end{itemize}
+
+	\item Card Effects:
+	\begin{itemize}
+	\setlength{\itemsep}{0em}
+		\item \textbf{Skip:} Next player in sequence misses a turn
+		\item \textbf{Draw Two:} Next player in sequence draws two cards and misses a turn
+		\item \textbf{Reverse:} Order of play switches directions (clockwise to counterclockwise, and vice versa)
+		\item \textbf{Wild:} Player declares next color to be matched (may be used on any turn even if the player has matching color)
+		\item \textbf{Wild Draw Four:} Player declares next color to be matched; next player in sequence draws four cards and loses a turn. May be legally played only if the player has no cards of the current color; Wild cards and cards with the same number or symbol in a different color do not count.
+	\end{itemize}
+
+	\item Game processes related Operations:
+	\begin{itemize}
+	\setlength{\itemsep}{0em}
+		\item \textbf{Shuffle:} randomize the deck.
+		\item \textbf{Match color/number:} check if the cards users play match with the last played card in color or number.
+		\item \textbf{Check winner:} check which player wins and calculates the score that the winner get.
+		\item \textbf{Check uno:} check if there is only one card in hand.
+	\end{itemize}
+	
 \end{itemize}
 
 
