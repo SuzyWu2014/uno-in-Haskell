@@ -1,4 +1,4 @@
-module Card where
+module CardEffects where
 
 import UnoDataModels
 
