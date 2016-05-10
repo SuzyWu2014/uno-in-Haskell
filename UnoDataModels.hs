@@ -53,5 +53,5 @@ data GameState = GameState {
     , deck :: [Card]
 } deriving(Show)
 
-
+type Deck = [Card]
 
