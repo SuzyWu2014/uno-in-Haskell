@@ -41,9 +41,12 @@ data Direction = Clockwise | CounterClockwise
 data PlayerState =  PlayerState{
       id :: Int
     , name :: String
-    --, score :: Int
-    , cardsInHand :: [(Int, Card)]
+    , score :: Int
+    , cardsInHand :: [Card]
 } deriving(Show)
+
+getPlayerId :: PlayerState -> Int
+getPlayerId (PlayerState _id _ _ _) = _id
 
 data GameState = GameState {
       dir :: Direction
@@ -55,3 +58,4 @@ data GameState = GameState {
 
 type Deck = [Card]
 
+drawCard :: Deck -> Card 
