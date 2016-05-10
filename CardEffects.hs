@@ -12,7 +12,7 @@ import UnoDataModels
 
 --Next player in sequence misses a turn
 skip :: GameState -> GameState
-skip (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _whoseTurn _players _dir) _currCard _players _deck
+skip (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir ) _currCard _players _deck
 
 type CurrentTurn = Int
 type CountPlayer = Int
