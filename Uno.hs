@@ -1,7 +1,7 @@
 module Uno where
 
-import UnoDataModels
-import GameUtils
+import UnoDataModels 
+import GameSim
 
 --main game process goes here
 simGame :: GameState -> IO GameState

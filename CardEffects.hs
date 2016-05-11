@@ -1,7 +1,7 @@
 module CardEffects where
 
 import UnoDataModels
-import GameUtils
+import Utils
 
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 
@@ -46,7 +46,10 @@ drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
     return game'{whoseTurn=_nextTurn}
   where
     _nextTurn = getNextTurn _whoseTurn _players _dir    
-    
+ 
+--draw one card from deck
+-- Type: GameState -> Player ID -> IO GameState 
+  
 -- drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _nextTurn _players _dir) _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
 
 -- type PlayerID = Int
