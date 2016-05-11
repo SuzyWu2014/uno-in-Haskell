@@ -62,17 +62,27 @@ updateDeck (_:_cards) i = updateDeck _cards (i-1)
 -- reverse effect
 -- #######################################################
 reverse :: GameState -> GameState
-reverse = undefined
+reverse (GameState _dir _whoseTurn _currCard _players _deck) = 
+                                                let _nextTurn  = getNextTurn  _whoseTurn _players (reverseDir _dir)
+                                                in GameState(reverseDir _dir) _nextTurn _currCard _players _deck 
+                                
+                                     
+reverseDir :: Direction -> Direction
+reverseDir Clockwise        = CounterClockwise
+reverseDir CounterClockwise = Clockwise
+
 -- #######################################################
 -- wild effect
 -- #######################################################
 wild :: GameState -> GameState
 wild = undefined
+
 -- #######################################################
 -- wildDrawFour effect
 -- #######################################################
 wildDrawFour :: GameState -> GameState
 wildDrawFour = undefined
+
 -- #######################################################
 -- regular card effect
 -- #######################################################
