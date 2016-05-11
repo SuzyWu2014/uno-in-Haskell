@@ -50,6 +50,7 @@ getPlayerId (PlayerState _id _ _ _) = _id
 
 data GameState = GameState {
       dir :: Direction
+    , currClr :: Color -- only check this when current card is Wild/WildDrawFour
     , realPlayer :: Int
     , whoseTurn :: Int
     , currCard :: Card

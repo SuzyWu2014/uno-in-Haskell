@@ -1,28 +1,48 @@
 module GameUtils where
 
 import UnoDataModels
-
+import Config
 -------------------------------------------------
 -- Game initialization
 -------------------------------------------------
-getNumOfPlayers:: IO()
-getNumOfPlayers = undefined
 
 initDeck :: Deck
-initDeck =undefined
+initDeck = cardPile
 
-shuffle :: Deck -> Deck
-shuffle = undefined
+initPlayer :: Int -> String -> PlayerState
+initPlayer _id _name = PlayerState _id _name 0 []
 
-initPlayer :: (Deck , [PlayerState])
-initPlayer = undefined
+initRobotPlayers :: Int -> [PlayerState]
+initRobotPlayers 0 = []
+initRobotPlayers _num = initPlayer _id (getRobotPlayerName _id) : initRobotPlayers (_num-1) 
+    where _id = _num - 1 --index: 0 - num-1
 
-initGame :: Int -> GameState
-initGame = undefined
+getRobotPlayerName :: Int -> String
+getRobotPlayerName _id = playerNames !! _id
 
-pickStartPlayer :: Int -> Int
-pickStartPlayer = undefined
+playerNames::[String]
+playerNames =["Alice", "Joe", "Mike", "Emily"]
 
+pickStarter :: Int -> Int
+pickStarter _num = div _num 2
+
+initGame :: Int -> String -> GameState
+initGame _num _name = GameState{
+    dir = Clockwise,
+    currClr = Green,
+    realPlayer = _num,
+    whoseTurn  = pickStarter _num,
+    players = initRobotPlayers _num ++ [initPlayer _num _name],
+    deck = initDeck
+}  
+
+dealCards :: Int -> GameState -> IO GameState
+dealCards _num game@GameState{players=_players, deck=_deck} = 
+    if _num >= 0 then do
+        game'  <- drawCards 5 game _num
+        dealCards (_num-1) game' 
+    else
+        return game
 -------------------------------------------------
 -- Game State print
 -------------------------------------------------
@@ -64,6 +84,8 @@ drawCard game@GameState{deck=(card:ds), players=_players} usr = return game{deck
     p = take usr _players ++ [u{cardsInHand=card:_cardsInHand}] ++
         drop (usr+1) _players
 
+-- First Int: nums of cards to drae
+-- Second Int: playerID
 drawCards :: Int -> GameState -> Int -> IO GameState
 drawCards 0 game _ = return game
 drawCards n game usr = do
@@ -89,10 +111,8 @@ checkWinner = undefined
 updateScore :: PlayerState -> PlayerState
 updateScore = undefined
 
-
-
-
-
+isOver :: GameState -> Bool
+isOver = undefined
 
 -------------------------------------------------
 -- AI playing

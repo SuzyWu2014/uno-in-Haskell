@@ -28,8 +28,8 @@ getNextTurn _whoseTurn _players _dir = varifyTurnNum (_whoseTurn + dirt _dir) (l
 -- varify the index of current player, making sure it goes in a manner of cycle
 varifyTurnNum :: CurrentTurn -> CountPlayer-> NextTurn
 varifyTurnNum _whoseTurn num_p 
-                       | _whoseTurn > num_p = 1
-                       | _whoseTurn == 0    = num_p
+                       | _whoseTurn == num_p = 0
+                       | _whoseTurn < 0    = num_p
                        | otherwise          = _whoseTurn 
 
 -- turn direction into operation                            
@@ -94,6 +94,11 @@ reverseDir CounterClockwise = Clockwise
 wild :: GameState -> IO GameState
 wild = undefined
 
+robotPlayer :: GameState -> Bool
+robotPlayer = undefined
+
+randomPickColor :: GameState -> Color
+randomPickColor = undefined
 -- #######################################################
 -- wildDrawFour effect:
 --Player declares next color to be matched; next player in sequence draws four cards and loses a turn. May be legally played only if the player has no cards of the current color; Wild cards and cards with the same number or symbol in a different color do not count.
