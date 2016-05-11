@@ -3,13 +3,21 @@ module GameSim where
 import UnoDataModels
 import Utils
 import Config
+import System.Random
 
 -------------------------------------------------
 -- Game initialization
 -------------------------------------------------
 
+shuffle :: StdGen -> Deck -> Deck
+shuffle gen []      = []
+shuffle gen (x:xs)  = take ind rec ++ [x] ++ drop ind rec
+    where (n, gen') = random gen :: (Int, StdGen)
+          ind       = mod n $ length xs + 1
+          rec       = shuffle gen' xs
+
 initDeck :: Deck
-initDeck = cardPile
+initDeck = shuffle (mkStdGen 1) cardPile
 
 initPlayer :: Int -> String -> PlayerState
 initPlayer _id _name = PlayerState _id _name 0 []
@@ -23,7 +31,7 @@ getRobotPlayerName :: Int -> String
 getRobotPlayerName _id = playerNames !! _id
 
 playerNames::[String]
-playerNames =["Alice", "Joe", "Mike", "Emily"]
+playerNames = ["Alice", "Joe", "Mike", "Emily"]
 
 pickStarter :: Int -> Int
 pickStarter _num = div _num 2
