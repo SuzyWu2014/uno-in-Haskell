@@ -4,23 +4,37 @@ import UnoDataModels
 -------------------------------------------------
 -- Game initialization
 -------------------------------------------------
-getNumOfPlayers:: IO()
-getNumOfPlayers = undefined
 
 initDeck :: Deck
 initDeck =undefined
 
-shuffle :: Deck -> Deck
-shuffle = undefined
+initPlayer :: Int -> String -> PlayerState
+initPlayer _id _name = PlayerState _id _name 0 []
 
-initPlayer :: (Deck , [PlayerState])
-initPlayer = undefined
+initRobotPlayers :: Int -> [PlayerState]
+initRobotPlayers 0 = []
+initRobotPlayers _num = initPlayer _id (getRobotPlayerName _id) : initRobotPlayers (_num-1) 
+    where _id = _num - 1 --index: 0 - num-1
 
-initGame :: Int -> GameState
-initGame = undefined
+getRobotPlayerName :: Int -> String
+getRobotPlayerName _id = playerNames !! _id
 
-pickStartPlayer :: Int -> Int
-pickStartPlayer = undefined
+playerNames::[String]
+playerNames =["Alice", "Joe", "Mike", "Emily"]
+
+pickStarter :: Int -> Int
+pickStarter _num = div _num 2
+
+initGame :: Int -> String -> GameState
+initGame _num _name = GameState{
+    dir = Clockwise,
+    currClr = Green,
+    realPlayer = _num,
+    whoseTurn  = pickStarter _num,
+    players = initRobotPlayers _num ++ [initPlayer _num _name],
+    deck = initDeck
+}  
+
 
 -------------------------------------------------
 -- Game State print

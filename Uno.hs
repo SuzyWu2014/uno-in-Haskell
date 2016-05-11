@@ -5,9 +5,10 @@ import GameUtils
 
 --main game process goes here
 simGame :: GameState -> IO GameState
-simGame = undefined
+simGame game@(GameState _dir _currClr _realPlayer _whoseTurn _currColor _players _deck ) = do
+	return game
 
-main = do
+uno = do
        putStrLn "Greetings!  What is your name?"
        _name <- getLine
        putStrLn $ "Welcome to UNO, " ++ _name ++ "!"
@@ -15,7 +16,7 @@ main = do
        _num <- getLine
        putStrLn "Initializing game..."
        --run game
-       let game = initGame (read _num :: Int)
+       let game = initGame (read _num :: Int) _name
        putStrLn "Starting game..."
        end <- simGame game
        putStrLn "Game is over."
