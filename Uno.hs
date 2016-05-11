@@ -13,12 +13,15 @@ uno = do
        _name <- getLine
        putStrLn $ "Welcome to UNO, " ++ _name ++ "!"
        putStrLn "How many players would you like to play with? [1-4]"
-       _num <- getLine
+       _numStr <- getLine
        putStrLn "Initializing game..."
        --run game
-       let game = initGame (read _num :: Int) _name
+       let _num = read _numStr :: Int
+       let game = initGame _num _name
+       putStrLn "Dealing cards..."
+       game' <- dealCards _num game
        putStrLn "Starting game..."
-       end <- simGame game
+       end   <- simGame game'
        putStrLn "Game is over."
 
 

@@ -35,7 +35,13 @@ initGame _num _name = GameState{
     deck = initDeck
 }  
 
-
+dealCards :: Int -> GameState -> IO GameState
+dealCards _num game@GameState{players=_players, deck=_deck} = 
+    if _num >= 0 then do
+        game'  <- drawCards 5 game _num
+        dealCards (_num-1) game' 
+    else
+        return game
 -------------------------------------------------
 -- Game State print
 -------------------------------------------------
@@ -77,6 +83,8 @@ drawCard game@GameState{deck=(card:ds), players=_players} usr = return game{deck
     p = take usr _players ++ [u{cardsInHand=card:_cardsInHand}] ++
         drop (usr+1) _players
 
+-- First Int: nums of cards to drae
+-- Second Int: playerID
 drawCards :: Int -> GameState -> Int -> IO GameState
 drawCards 0 game _ = return game
 drawCards n game usr = do
@@ -102,6 +110,8 @@ checkWinner = undefined
 updateScore :: PlayerState -> PlayerState
 updateScore = undefined
 
+isOver :: GameState -> Bool
+isOver = undefined
 -------------------------------------------------
 -- AI playing
 -------------------------------------------------
