@@ -1,7 +1,7 @@
 module GameUtils where
 
 import UnoDataModels
-import Config
+
 -------------------------------------------------
 -- Game initialization
 -------------------------------------------------

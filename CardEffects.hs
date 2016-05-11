@@ -2,7 +2,7 @@ module CardEffects where
 
 import UnoDataModels
 import GameUtils
-
+import Config
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 
 -- Card effect - update GameState, including 
