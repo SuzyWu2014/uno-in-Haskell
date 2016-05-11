@@ -73,8 +73,8 @@ drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
 -- #######################################################
 -- reverse effect - Order of play switches directions (clockwise to counterclockwise, and vice versa)
 -- #######################################################
-reverse :: GameState -> IO GameState
-reverse game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = return game{whoseTurn=_nextTurn, dir=_newDir}
+reverseD :: GameState -> IO GameState
+reverseD game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = return game{whoseTurn=_nextTurn, dir=_newDir}
   where
     _newDir   = reverseDir _dir
     _nextTurn = getNextTurn _whoseTurn _players _newDir
