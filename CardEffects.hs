@@ -1,6 +1,7 @@
 module CardEffects where
 
 import UnoDataModels
+import GameUtils
 
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 
@@ -34,8 +35,9 @@ dirt CounterClockwise = -1
 -- #######################################################
 -- drawTwo effect - Next player in sequence draws two cards and misses a turn
 -- #######################################################
-drawTwo :: GameState -> GameState
-drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _nextTurn _players _dir) _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
+drawTwo :: Int -> GameState -> Int -> IO GameState
+-- drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _nextTurn _players _dir) _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
+drawTwo 2 = drawCards 2
 
 type PlayerID = Int
 updatePlayers :: [PlayerState] -> PlayerID -> Deck -> [PlayerState]
@@ -79,7 +81,7 @@ wild = undefined
 -- #######################################################
 -- wildDrawFour effect
 -- #######################################################
-wildDrawFour :: GameState -> GameState
+wildDrawFour :: Int -> GameState -> Int -> IO GameState
 wildDrawFour = undefined
 
 -- #######################################################
