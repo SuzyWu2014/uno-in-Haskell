@@ -54,6 +54,7 @@ dropCard :: GameState -> GameState
 dropCard = undefined
 
 --draw one card from deck
+-- Type: GameState -> Player ID -> IO GameState
 drawCard :: GameState -> Int -> IO GameState
 drawCard game@GameState{deck=(card:ds), players=_players} usr = return game{deck=ds, players=p}
   where
