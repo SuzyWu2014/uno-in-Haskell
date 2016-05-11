@@ -30,10 +30,10 @@ data Card = Card { num :: Maybe Int
 }
 instance Show Card where
   show (Card nm cr _ t d) = case (nm, cr) of
-                  (Just n, Just c)   -> show t ++ "("++show n++", "++show c++"): "++d
-                  (Nothing, Just c)  -> show t ++ " - " ++ show c ++ ": "++d
-                  (Nothing, Nothing) -> show t ++ ": "++ d
-                  _                  -> show d -- ?
+                  (Just n, Just c)   -> show t ++ "("++show n++", "++show c++"): " ++ d ++ "\n"
+                  (Nothing, Just c)  -> show t ++ " - " ++ show c ++ ": " ++ d ++ "\n"
+                  (Nothing, Nothing) -> show t ++ ": "++ d ++ "\n"
+                  _                  -> show d ++ "\n"-- ?
 
 data Direction = Clockwise | CounterClockwise
                 deriving(Show)    
