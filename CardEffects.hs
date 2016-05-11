@@ -32,10 +32,10 @@ dirt :: Direction -> Int
 dirt Clockwise        = 1
 dirt CounterClockwise = -1
 -- #######################################################
--- drawTwo effect
+-- drawTwo effect - Next player in sequence draws two cards and misses a turn
 -- #######################################################
 drawTwo :: GameState -> GameState
-drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir _nextTurn _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
+drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _nextTurn _players _dir) _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
 
 type PlayerID = Int
 updatePlayers :: [PlayerState] -> PlayerID -> Deck -> [PlayerState]
@@ -59,14 +59,13 @@ updateDeck d  0         = d
 updateDeck (_:_cards) i = updateDeck _cards (i-1)
 
 -- #######################################################
--- reverse effect
+-- reverse effect - Order of play switches directions (clockwise to counterclockwise, and vice versa)
 -- #######################################################
 reverse :: GameState -> GameState
 reverse (GameState _dir _whoseTurn _currCard _players _deck) = 
-                                                let _nextTurn  = getNextTurn  _whoseTurn _players (reverseDir _dir)
-                                                in GameState(reverseDir _dir) _nextTurn _currCard _players _deck 
-                                
-                                     
+        let _nextTurn  = getNextTurn  _whoseTurn _players (reverseDir _dir)
+        in GameState (reverseDir _dir) _nextTurn _currCard _players _deck 
+                                                                    
 reverseDir :: Direction -> Direction
 reverseDir Clockwise        = CounterClockwise
 reverseDir CounterClockwise = Clockwise
@@ -84,8 +83,9 @@ wildDrawFour :: GameState -> GameState
 wildDrawFour = undefined
 
 -- #######################################################
--- regular card effect
+-- regular card effect - Move to next player
 -- #######################################################
 regular :: GameState -> GameState
-regular = undefined
-
+regular (GameState _dir _whoseTurn _currCard _players _deck) =
+    GameState _dir _nextTurn _currCard _players _deck
+     where _nextTurn = getNextTurn _whoseTurn _players _dir
