@@ -35,30 +35,32 @@ dirt CounterClockwise = -1
 -- #######################################################
 -- drawTwo effect - Next player in sequence draws two cards and misses a turn
 -- #######################################################
+-- First Int: number of cards to draw
+-- Second Int: PlayerID
 drawTwo :: Int -> GameState -> Int -> IO GameState
--- drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _nextTurn _players _dir) _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
 drawTwo 2 = drawCards 2
+-- drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _nextTurn _players _dir) _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
 
-type PlayerID = Int
-updatePlayers :: [PlayerState] -> PlayerID -> Deck -> [PlayerState]
-updatePlayers  []            _  _                = []
-updatePlayers  _playerState  _  []               = _playerState
-updatePlayers (p:ps) _playerId _deck 
-                    | getPlayerId p /= _playerId = updatePlayers ps _playerId _deck
-                    | getPlayerId p == _playerId = playerStateUpdateDrawCard p _deck 2:ps
+-- type PlayerID = Int
+-- updatePlayers :: [PlayerState] -> PlayerID -> Deck -> [PlayerState]
+-- updatePlayers  []            _  _                = []
+-- updatePlayers  _playerState  _  []               = _playerState
+-- updatePlayers (p:ps) _playerId _deck 
+--                     | getPlayerId p /= _playerId = updatePlayers ps _playerId _deck
+--                     | getPlayerId p == _playerId = playerStateUpdateDrawCard p _deck 2:ps
 
-playerStateUpdateDrawCard :: PlayerState -> Deck -> Int ->PlayerState
-playerStateUpdateDrawCard  (PlayerState _id _name _score  _cards) _deck i = PlayerState _id _name _score (getCards _deck i ++_cards)
+-- playerStateUpdateDrawCard :: PlayerState -> Deck -> Int ->PlayerState
+-- playerStateUpdateDrawCard  (PlayerState _id _name _score  _cards) _deck i = PlayerState _id _name _score (getCards _deck i ++_cards)
 
-getCards :: Deck -> Int -> [Card]
-getCards _ 0          = []
-getCards [] _         = []
-getCards (c:_cards) i = c : getCards _cards (i-1)
+-- getCards :: Deck -> Int -> [Card]
+-- getCards _ 0          = []
+-- getCards [] _         = []
+-- getCards (c:_cards) i = c : getCards _cards (i-1)
 
-updateDeck :: Deck -> Int -> Deck
-updateDeck [] _         = []
-updateDeck d  0         = d
-updateDeck (_:_cards) i = updateDeck _cards (i-1)
+-- updateDeck :: Deck -> Int -> Deck
+-- updateDeck [] _         = []
+-- updateDeck d  0         = d
+-- updateDeck (_:_cards) i = updateDeck _cards (i-1)
 
 -- #######################################################
 -- reverse effect - Order of play switches directions (clockwise to counterclockwise, and vice versa)
