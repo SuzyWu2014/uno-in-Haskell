@@ -16,7 +16,7 @@ shuffle = undefined
 initPlayer :: (Deck , [PlayerState])
 initPlayer = undefined
 
-initGame :: GameState
+initGame :: Int -> GameState
 initGame = undefined
 
 pickStartPlayer :: Int -> Int
