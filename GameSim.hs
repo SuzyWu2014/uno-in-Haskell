@@ -1,7 +1,12 @@
-module GameUtils where
+module GameSim where
 
 import UnoDataModels
+<<<<<<< HEAD:GameUtils.hs
 
+=======
+import Utils
+import Config
+>>>>>>> 7808be73fc45ca6e5660b85925ac054221c3e936:GameSim.hs
 -------------------------------------------------
 -- Game initialization
 -------------------------------------------------
@@ -73,24 +78,6 @@ matchNum = undefined
 --IO choose card to play and perform the effect
 dropCard :: GameState -> GameState
 dropCard = undefined
-
--- change whoseTurn?
---draw one card from deck
--- Type: GameState -> Player ID -> IO GameState 
-drawCard :: GameState -> Int -> IO GameState
-drawCard game@GameState{deck=(card:ds), players=_players} usr = return game{deck=ds, players=p}
-  where
-    u@(PlayerState _ _ _ _cardsInHand) = players game !! usr
-    p = take usr _players ++ [u{cardsInHand=card:_cardsInHand}] ++
-        drop (usr+1) _players
-
--- First Int: nums of cards to drae
--- Second Int: playerID
-drawCards :: Int -> GameState -> Int -> IO GameState
-drawCards 0 game _ = return game
-drawCards n game usr = do
-    game' <- drawCard game usr
-    drawCards (n-1) game' usr
 
 -- IO pick an color and update GameState
 pickColor :: GameState -> GameState
