@@ -13,8 +13,12 @@ import GameUtils
 -- #######################################################
 --Next player in sequence misses a turn
 -- #######################################################
-skip :: GameState -> GameState
-skip (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir ) _currCard _players _deck
+skip :: GameState -> IO GameState
+skip game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = return game{whoseTurn=_nextTurn}
+   where _nextTurn = getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir
+
+-- skip' :: GameState -> GameState
+-- skip' (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir ) _currCard _players _deck
 
 type CurrentTurn = Int
 type CountPlayer = Int
@@ -35,10 +39,14 @@ dirt CounterClockwise = -1
 -- #######################################################
 -- drawTwo effect - Next player in sequence draws two cards and misses a turn
 -- #######################################################
--- First Int: number of cards to draw
--- Second Int: PlayerID
-drawTwo :: Int -> GameState -> Int -> IO GameState
-drawTwo 2 = drawCards 2
+-- need to update whoseTurn
+drawTwo ::GameState -> IO GameState
+drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
+    game' <- drawCards 2 game _nextTurn
+    return game'{whoseTurn=_nextTurn}
+  where
+    _nextTurn = getNextTurn _whoseTurn _players _dir    
+    
 -- drawTwo (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn _nextTurn _players _dir) _currCard (updatePlayers _players _nextTurn _deck) (updateDeck _deck 2) where _nextTurn = getNextTurn _whoseTurn _players _dir
 
 -- type PlayerID = Int
@@ -65,31 +73,43 @@ drawTwo 2 = drawCards 2
 -- #######################################################
 -- reverse effect - Order of play switches directions (clockwise to counterclockwise, and vice versa)
 -- #######################################################
-reverse :: GameState -> GameState
-reverse (GameState _dir _whoseTurn _currCard _players _deck) = 
-        let _nextTurn  = getNextTurn  _whoseTurn _players (reverseDir _dir)
-        in GameState (reverseDir _dir) _nextTurn _currCard _players _deck 
+reverse :: GameState -> IO GameState
+reverse game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = return game{whoseTurn=_nextTurn, dir=_newDir}
+  where
+    _newDir   = reverseDir _dir
+    _nextTurn = getNextTurn _whoseTurn _players _newDir
+
+-- reverse' :: GameState -> GameState
+-- reverse' (GameState _dir _whoseTurn _currCard _players _deck) = 
+--         let _nextTurn  = getNextTurn  _whoseTurn _players (reverseDir _dir)
+--         in GameState (reverseDir _dir) _nextTurn _currCard _players _deck 
                                                                     
 reverseDir :: Direction -> Direction
 reverseDir Clockwise        = CounterClockwise
 reverseDir CounterClockwise = Clockwise
 
 -- #######################################################
--- wild effect
+-- wild effect - Player declares next color to be matched (may be used on any turn even if the player has matching color)
 -- #######################################################
-wild :: GameState -> GameState
+wild :: GameState -> IO GameState
 wild = undefined
 
 -- #######################################################
--- wildDrawFour effect
+-- wildDrawFour effect:
+--Player declares next color to be matched; next player in sequence draws four cards and loses a turn. May be legally played only if the player has no cards of the current color; Wild cards and cards with the same number or symbol in a different color do not count.
 -- #######################################################
-wildDrawFour :: Int -> GameState -> Int -> IO GameState
+wildDrawFour :: GameState -> IO GameState
 wildDrawFour = undefined
 
 -- #######################################################
 -- regular card effect - Move to next player
 -- #######################################################
-regular :: GameState -> GameState
-regular (GameState _dir _whoseTurn _currCard _players _deck) =
-    GameState _dir _nextTurn _currCard _players _deck
-     where _nextTurn = getNextTurn _whoseTurn _players _dir
+regular :: GameState -> IO GameState
+regular game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = return game{whoseTurn=_nextTurn}
+  where
+    _nextTurn = getNextTurn _whoseTurn _players _dir
+
+-- regular :: GameState -> GameState
+-- regular (GameState _dir _whoseTurn _currCard _players _deck) =
+--     GameState _dir _nextTurn _currCard _players _deck
+--      where _nextTurn = getNextTurn _whoseTurn _players _dir

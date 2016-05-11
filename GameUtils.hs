@@ -53,6 +53,7 @@ matchNum = undefined
 dropCard :: GameState -> GameState
 dropCard = undefined
 
+-- change whoseTurn?
 --draw one card from deck
 -- Type: GameState -> Player ID -> IO GameState 
 drawCard :: GameState -> Int -> IO GameState

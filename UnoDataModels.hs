@@ -50,6 +50,7 @@ getPlayerId (PlayerState _id _ _ _) = _id
 
 data GameState = GameState {
       dir :: Direction
+    , realPlayer :: Int
     , whoseTurn :: Int
     , currCard :: Card
     , players :: [PlayerState] 
