@@ -10,8 +10,8 @@ import Uno
 main :: IO ()
 main = uno
 
-showDeck::[Card]
-showDeck = initDeck
+showInitDeck::[Card]
+showInitDeck = initDeck
 
 showInitState :: GameState
 showInitState = initGame 4 "Beaver"
