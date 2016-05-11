@@ -32,8 +32,9 @@ initGame _num _name = GameState{
     dir = Clockwise,
     currClr = Green,
     realPlayer = _num,
+    currCard = head initDeck, -- for test purpose
     whoseTurn  = pickStarter _num,
-    players = initRobotPlayers _num ++ [initPlayer _num _name],
+    players = initPlayer _num _name :initRobotPlayers _num,
     deck = initDeck
 }  
 
