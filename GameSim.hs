@@ -1,12 +1,9 @@
 module GameSim where
 
 import UnoDataModels
-<<<<<<< HEAD:GameUtils.hs
-
-=======
 import Utils
 import Config
->>>>>>> 7808be73fc45ca6e5660b85925ac054221c3e936:GameSim.hs
+
 -------------------------------------------------
 -- Game initialization
 -------------------------------------------------
