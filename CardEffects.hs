@@ -14,7 +14,9 @@ import Utils
 --Next player in sequence misses a turn
 -- #######################################################
 skip :: GameState -> IO GameState
-skip game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = return game{whoseTurn=_nextTurn}
+skip game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
+  putStrLn "Player played Skip"
+  return game{whoseTurn=_nextTurn}
    where _nextTurn = getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir
 
 -- skip' :: GameState -> GameState
@@ -41,7 +43,8 @@ dirt CounterClockwise = -1
 -- #######################################################
 -- need to update whoseTurn
 drawTwo ::GameState -> IO GameState
-drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
+drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do 
+    putStrLn "Player played drawTwo"
     game' <- drawCards 2 game _nextTurn
     return game'{whoseTurn=_nextTurn}
   where
@@ -77,7 +80,9 @@ drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
 -- reverse effect - Order of play switches directions (clockwise to counterclockwise, and vice versa)
 -- #######################################################
 reverseD :: GameState -> IO GameState
-reverseD game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = return game{whoseTurn=_nextTurn, dir=_newDir}
+reverseD game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = do 
+    putStrLn "Player played reverse"
+    return game{whoseTurn=_nextTurn, dir=_newDir}
   where
     _newDir   = reverseDir _dir
     _nextTurn = getNextTurn _whoseTurn _players _newDir
@@ -113,7 +118,9 @@ wildDrawFour = undefined
 -- regular card effect - Move to next player
 -- #######################################################
 regular :: GameState -> IO GameState
-regular game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = return game{whoseTurn=_nextTurn}
+regular game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = do 
+    putStrLn "Player played regular"
+    return game{whoseTurn=_nextTurn}
   where
     _nextTurn = getNextTurn _whoseTurn _players _dir
 

@@ -6,7 +6,7 @@ import CardEffects
 
 --main game process goes here
 simGame :: GameState -> IO GameState
-simGame game@(GameState _dir _currClr _realPlayer _whoseTurn _currColor _players _deck ) = skip game >> drawTwo  game  
+simGame game@(GameState _dir _currClr _realPlayer _whoseTurn _currColor _players _deck ) = skip game >> drawTwo game >> reverseD game >> regular game
 
 uno :: IO()
 uno = do
