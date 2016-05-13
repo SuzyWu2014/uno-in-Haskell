@@ -1,5 +1,6 @@
 module UnoDataModels where
 
+import Data.Map as M
 -- data Card = Skip Color
 --           | DrawTwo Color
 --           | Reverse Color
@@ -14,7 +15,7 @@ data CardType = Skip
               | WildDrawFour
               | Regular  
               deriving(Show)
-data Color = Yellow | Red | Blue | Green
+data Color = Yellow | Red | Blue | Green | NoColor
             deriving(Show)
 -- ?? Card effect, what if doesn't need to interacter with user
 -- num - The number in card if there is one.
@@ -23,16 +24,16 @@ data Color = Yellow | Red | Blue | Green
 -- cardType - indicate the type of the card
 -- desc: the description of the card
 data Card = Card { num :: Maybe Int
-                 , clr :: Maybe Color
+                 , clr :: Color
                  , effect :: GameState -> IO GameState
-                 , cardType :: CardType
+                 , cardType :: M.Map Int CardType
                  , desc :: String
 }
 instance Show Card where
   show (Card nm cr _ t d) = case (nm, cr) of
-                  (Just n, Just c)   -> show t ++ "("++show n++", "++show c++"): " ++ d ++ "\n"
-                  (Nothing, Just c)  -> show t ++ " - " ++ show c ++ ": " ++ d ++ "\n"
-                  (Nothing, Nothing) -> show t ++ ": "++ d ++ "\n"
+                  ( n, Just c)   -> show t ++ "("++show n++", "++show c++"): " ++ d ++ "\n"
+                  (NoColor, Just c)  -> show t ++ " - " ++ show c ++ ": " ++ d ++ "\n"
+                  (NoColor, Just c) -> show t ++ ": "++ d ++ "\n"
                   _                  -> show d ++ "\n"-- ?
 
 data Direction = Clockwise | CounterClockwise
