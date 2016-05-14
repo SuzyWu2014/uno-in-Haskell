@@ -2,8 +2,18 @@ module CardEffects where
 
 import UnoDataModels
 import Utils
-
+import Control.Monad.State
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
+
+
+runEffect :: CardType -> Game ()
+runEffect _cardType = case _cardType of
+                          Skip          -> get >>= skip 
+--                 | _cardType == Reverse      = runStateT (reverseD _state)
+--                 | _cardType == DrawTwo      = runStateT (drawTwo _state)
+--                 | _cardType == Wild         = runStateT (wild _state)
+--                 | _cardType == WildDrawFour = runStateT (wildDrawFour _state)
+--                 | _cardType == Regular      = runStateT (regular _state)
 
 -- Card effect - update GameState, including 
     -- current card
@@ -13,22 +23,35 @@ import Utils
 -- #######################################################
 --Next player in sequence misses a turn
 -- #######################################################
-skip :: GameState -> IO GameState
+-- skip :: Game ()
+-- skip = do
+--   state <- get
+--   lift $ putStrLn "Player played Skip"
+--   let game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = state
+--   put game{whoseTurn=_nextTurn}
+--    where _nextTurn = getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir
+
+skip :: GameState -> Game ()
 skip game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
-  putStrLn "Player played Skip"
-  return game{whoseTurn=_nextTurn}
+  lift $ putStrLn "Player played Skip"
+  put game{whoseTurn=_nextTurn}
    where _nextTurn = getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir
 
 -- skip' :: GameState -> GameState
 -- skip' (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir ) _currCard _players _deck
 
-type CurrentTurn = Int
-type CountPlayer = Int
-type NextTurn    = Int
-getNextTurn :: CurrentTurn -> [PlayerState]-> Direction -> NextTurn
+
+-- @int Current turn
+-- @[PlayerState]
+-- @Direction
+-- @Int NextTurn
+getNextTurn :: Int -> [PlayerState]-> Direction -> Int
 getNextTurn _whoseTurn _players _dir = varifyTurnNum (_whoseTurn + dirt _dir) (length _players)
 -- varify the index of current player, making sure it goes in a manner of cycle
-varifyTurnNum :: CurrentTurn -> CountPlayer-> NextTurn
+-- @Int CurrentTurn
+-- @Int number of players
+-- @Int Final decision of current turn
+varifyTurnNum :: Int -> Int-> Int
 varifyTurnNum _whoseTurn num_p 
                        | _whoseTurn == num_p = 0
                        | _whoseTurn < 0    = num_p

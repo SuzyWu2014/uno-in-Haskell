@@ -2,6 +2,8 @@ module Utils where
 
 import UnoDataModels
 
+-- type Game = StateT GameState IO
+
 drawCard :: GameState -> Int -> IO GameState
 drawCard game@GameState{deck=(card:ds), players=_players} usr = return game{deck=ds, players=p}
   where

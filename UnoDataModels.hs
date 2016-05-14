@@ -1,12 +1,6 @@
 module UnoDataModels where
 
-import Data.Map as M
--- data Card = Skip Color
---           | DrawTwo Color
---           | Reverse Color
---           | Wild
---           | WildDrawFour
---           | Regular Color Int 
+import Control.Monad.State
 
 data CardType = Skip  
               | DrawTwo  
@@ -15,26 +9,23 @@ data CardType = Skip
               | WildDrawFour
               | Regular  
               deriving(Show)
-data Color = Yellow | Red | Blue | Green | NoColor
+data Color = Yellow | Red | Blue | Green | Pick_A_Color
             deriving(Show)
--- ?? Card effect, what if doesn't need to interacter with user
--- num - The number in card if there is one.
--- clr - The color of the card if it's not Wild or WildDrawFour
--- effect - a function that takes the game state and produce an IO game, which maybe interact with the user to apply the effect of the card
+
+-- num - The score of the card. If there is a regular card, it is also the number shown in the card.
+-- clr - The color of the card; NoColor indicates Wild or WildDrawFour
 -- cardType - indicate the type of the card
--- desc: the description of the card
-data Card = Card { num :: Maybe Int
+-- desc: the abilities of the card
+data Card = Card { num :: Int
                  , clr :: Color
-                 , effect :: GameState -> IO GameState
-                 , cardType :: M.Map Int CardType
+                 , cardType :: CardType
                  , desc :: String
 }
+
 instance Show Card where
-  show (Card nm cr _ t d) = case (nm, cr) of
-                  ( n, Just c)   -> show t ++ "("++show n++", "++show c++"): " ++ d ++ "\n"
-                  (NoColor, Just c)  -> show t ++ " - " ++ show c ++ ": " ++ d ++ "\n"
-                  (NoColor, Just c) -> show t ++ ": "++ d ++ "\n"
-                  _                  -> show d ++ "\n"-- ?
+  show (Card nm cr t d) 
+                    | nm > 9    = show t ++ ": score - " ++ show nm ++ "; color: " ++ show cr ++", effect - " ++ d ++ "\n"
+                    | otherwise = show t ++ "("++show nm++", "++show cr++")"++ "\n"
 
 data Direction = Clockwise | CounterClockwise
                 deriving(Show)    
@@ -58,5 +49,7 @@ data GameState = GameState {
     , players :: [PlayerState] 
     , deck :: [Card]
 } deriving(Show)
+
+type Game = StateT GameState IO
 
 type Deck = [Card]

@@ -4,6 +4,7 @@ import UnoDataModels
 import Utils
 import Config
 import System.Random
+import Control.Monad.State
 
 -------------------------------------------------
 -- Game initialization
@@ -36,8 +37,8 @@ playerNames = ["Alice", "Joe", "Mike", "Emily"]
 pickStarter :: Int -> Int
 pickStarter _num = div _num 2
 
-initGame :: Int -> String -> GameState
-initGame _num _name = GameState{
+initGameState :: Int -> String -> GameState
+initGameState _num _name = GameState{
     dir = Clockwise,
     currClr = Green,
     realPlayer = _num,
@@ -47,13 +48,19 @@ initGame _num _name = GameState{
     deck = initDeck
 }  
 
-dealCards :: Int -> GameState -> IO GameState
+initGame :: Int -> String -> Game ()
+initGame _num _name = do
+    put (initGameState _num _name)
+    game <- get
+    dealCards 5 game
+
+dealCards :: Int -> GameState -> Game ()
 dealCards _num game@GameState{players=_players, deck=_deck} = 
     if _num >= 0 then do
-        game'  <- drawCards 5 game _num
+        game'  <- lift $ drawCards 5 game _num
         dealCards (_num-1) game' 
     else
-        return game
+        put game
 -------------------------------------------------
 -- Game State print
 -------------------------------------------------
@@ -72,6 +79,8 @@ showCardsInHand = undefined
 -------------------------------------------------
 -- Each playing turn
 -------------------------------------------------
+
+
 playableCard :: [(Int, Card)] -> [(Int, Card)]
 playableCard = undefined
 
