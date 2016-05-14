@@ -57,7 +57,7 @@ initGame _num _name = do
 dealCards :: Int -> GameState -> Game ()
 dealCards _num game@GameState{players=_players, deck=_deck} = 
     if _num >= 0 then do
-        game'  <- lift $ drawCards 5 game _num
+        let game'  = drawCards 5 game _num
         dealCards (_num-1) game' 
     else
         put game

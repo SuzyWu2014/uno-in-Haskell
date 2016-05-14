@@ -2,18 +2,20 @@ module CardEffects where
 
 import UnoDataModels
 import Utils
-import Control.Monad.State
+import Control.Monad.Trans
+import Control.Monad.Trans.State
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 
 
 runEffect :: CardType -> Game ()
 runEffect _cardType = case _cardType of
+                          Regular       -> get >>= regular
                           Skip          -> get >>= skip 
---                 | _cardType == Reverse      = runStateT (reverseD _state)
---                 | _cardType == DrawTwo      = runStateT (drawTwo _state)
---                 | _cardType == Wild         = runStateT (wild _state)
---                 | _cardType == WildDrawFour = runStateT (wildDrawFour _state)
---                 | _cardType == Regular      = runStateT (regular _state)
+                          Reverse       -> get >>= reverseD
+                          DrawTwo       -> get >>= drawTwo
+                          Wild          -> get >>= wild
+                          WildDrawFour  -> get >>= wildDrawFour
+
 
 -- Card effect - update GameState, including 
     -- current card
@@ -33,7 +35,7 @@ runEffect _cardType = case _cardType of
 
 skip :: GameState -> Game ()
 skip game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
-  lift $ putStrLn "Player played Skip"
+  liftIO $ putStrLn "Player played Skip"
   put game{whoseTurn=_nextTurn}
    where _nextTurn = getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir
 
@@ -65,11 +67,11 @@ dirt CounterClockwise = -1
 -- drawTwo effect - Next player in sequence draws two cards and misses a turn
 -- #######################################################
 -- need to update whoseTurn
-drawTwo ::GameState -> IO GameState
+drawTwo ::GameState -> Game ()
 drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do 
-    putStrLn "Player played drawTwo"
-    game' <- drawCards 2 game _nextTurn
-    return game'{whoseTurn=_nextTurn}
+    lift $ putStrLn "Player played drawTwo"
+    let game' = drawCards 2 game _nextTurn
+    put game'{whoseTurn=_nextTurn}
   where
     _nextTurn = getNextTurn _whoseTurn _players _dir    
  
@@ -102,10 +104,10 @@ drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
 -- #######################################################
 -- reverse effect - Order of play switches directions (clockwise to counterclockwise, and vice versa)
 -- #######################################################
-reverseD :: GameState -> IO GameState
+reverseD :: GameState -> Game()
 reverseD game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = do 
-    putStrLn "Player played reverse"
-    return game{whoseTurn=_nextTurn, dir=_newDir}
+    lift $ putStrLn "Player played reverse"
+    put game{whoseTurn=_nextTurn, dir=_newDir}
   where
     _newDir   = reverseDir _dir
     _nextTurn = getNextTurn _whoseTurn _players _newDir
@@ -122,7 +124,7 @@ reverseDir CounterClockwise = Clockwise
 -- #######################################################
 -- wild effect - Player declares next color to be matched (may be used on any turn even if the player has matching color)
 -- #######################################################
-wild :: GameState -> IO GameState
+wild :: GameState -> Game ()
 wild = undefined
 
 robotPlayer :: GameState -> Bool
@@ -134,16 +136,16 @@ randomPickColor = undefined
 -- wildDrawFour effect:
 --Player declares next color to be matched; next player in sequence draws four cards and loses a turn. May be legally played only if the player has no cards of the current color; Wild cards and cards with the same number or symbol in a different color do not count.
 -- #######################################################
-wildDrawFour :: GameState -> IO GameState
+wildDrawFour :: GameState -> Game ()
 wildDrawFour = undefined
 
 -- #######################################################
 -- regular card effect - Move to next player
 -- #######################################################
-regular :: GameState -> IO GameState
+regular :: GameState -> Game ()
 regular game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = do 
-    putStrLn "Player played regular"
-    return game{whoseTurn=_nextTurn}
+    lift $putStrLn "Player played regular"
+    put  game{whoseTurn=_nextTurn}
   where
     _nextTurn = getNextTurn _whoseTurn _players _dir
 

@@ -9,7 +9,7 @@ data CardType = Skip
               | WildDrawFour
               | Regular  
               deriving(Show)
-data Color = Yellow | Red | Blue | Green | Pick_A_Color
+data Color = Yellow | Red | Blue | Green | PickAColor
             deriving(Show)
 
 -- num - The score of the card. If there is a regular card, it is also the number shown in the card.
