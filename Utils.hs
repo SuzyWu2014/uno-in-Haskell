@@ -9,14 +9,14 @@ import UnoDataModels
 -- 3. after drawing, deck become empty 
 -- @Int Player
 drawCard :: GameState -> Int -> GameState
-drawCard game@GameState{deck=[], players=_players} usr        = game
+drawCard game@GameState{deck=[], players=_players} _        = game
 drawCard game@GameState{deck=(card:ds), players=_players} usr = game{deck=ds, players=p}
   where
     u@(PlayerState _ _ _ _cardsInHand) = players game !! usr
     p = take usr _players ++ [u{cardsInHand=card:_cardsInHand}] ++
         drop (usr+1) _players
 
--- First Int: nums of cards to drae
+-- First Int: nums of cards to draw
 -- Second Int: playerID
 drawCards :: Int -> GameState -> Int -> GameState
 drawCards 0 game _ = game

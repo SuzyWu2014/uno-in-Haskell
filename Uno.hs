@@ -36,7 +36,7 @@ uno = do
     let _num = read _numStr :: Int
     let init_state = initGameState _num _name 
         in do
-            ret <- evalStateT (simGame init_state)  init_state
+            evalStateT (simGame init_state)  init_state
             return ()
     putStrLn "Game is over."
 
