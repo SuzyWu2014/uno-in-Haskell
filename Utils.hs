@@ -21,10 +21,16 @@ drawCard game@GameState{deck=(card:ds), players=_players} usr = game{deck=ds, pl
 drawCards :: Int -> GameState -> Int -> GameState
 drawCards 0 game _ = game
 drawCards n game usr = drawCards (n-1) (drawCard game usr) usr
-   
 
 -- drawCards :: Int -> GameState -> Int -> IO GameState
 -- drawCards 0 game _ = return game
 -- drawCards n game usr = do
 --     game' <- drawCard game usr
 --     drawCards (n-1) game' usr 
+
+-- @Int max number
+-- @Int return number in [0,max]
+genRanInt :: Int -> Int
+genRanInt _ = 1
+
+

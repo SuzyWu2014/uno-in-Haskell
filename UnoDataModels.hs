@@ -11,6 +11,9 @@ data CardType = Skip
               deriving(Show)
 data Color = Yellow | Red | Blue | Green | PickAColor
             deriving(Show)
+            
+colors :: [Color]
+colors = [Yellow, Red, Blue, Green]
 
 -- num - The score of the card. If there is a regular card, it is also the number shown in the card.
 -- clr - The color of the card; NoColor indicates Wild or WildDrawFour

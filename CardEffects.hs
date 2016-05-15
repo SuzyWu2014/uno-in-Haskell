@@ -42,6 +42,11 @@ skip game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do
 -- skip' :: GameState -> GameState
 -- skip' (GameState _dir _whoseTurn _currCard _players _deck) = GameState _dir (getNextTurn (getNextTurn _whoseTurn _players _dir) _players _dir ) _currCard _players _deck
 
+-- @Int next ith turn
+-- @Int playerID of next turn 
+nextTurn :: Int -> GameState -> Int
+nextTurn 0 game@GameState{whoseTurn=_whoseTurn}= _whoseTurn
+nextTurn i game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = nextTurn (i-1) game{whoseTurn = getNextTurn _whoseTurn _players _dir}
 
 -- @int Current turn
 -- @[PlayerState]
@@ -71,9 +76,9 @@ drawTwo ::GameState -> Game ()
 drawTwo  game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = do 
     lift $ putStrLn "Player played drawTwo"
     let game' = drawCards 2 game _nextTurn
-    put game'{whoseTurn=_nextTurn}
+    put game'{whoseTurn=nextTurn 1 game'}
   where
-    _nextTurn = getNextTurn _whoseTurn _players _dir    
+    _nextTurn = nextTurn 1 game   
  
 --draw one card from deck
 -- Type: GameState -> Player ID -> IO GameState 
@@ -125,13 +130,18 @@ reverseDir CounterClockwise = Clockwise
 -- wild effect - Player declares next color to be matched (may be used on any turn even if the player has matching color)
 -- #######################################################
 wild :: GameState -> Game ()
-wild = undefined
+wild game = if robotPlayer game 
+     then 
+       put game{whoseTurn=nextTurn 1 game,currClr =  colors !! genRanInt 3}
+     else do
+        lift $ putStrLn "Please pick a color to continue: 1-Yellow, 2-Red, 3-Blue, 4-Green"
+        _numStr <- lift getLine
+        let clrInt = read _numStr :: Int
+        put game{whoseTurn=nextTurn 1 game, currClr = colors !! (clrInt-1)}
 
 robotPlayer :: GameState -> Bool
-robotPlayer = undefined
+robotPlayer  game@GameState{whoseTurn=_whoseTurn, realPlayer=_realPlayer} = _whoseTurn /= _realPlayer
 
-randomPickColor :: GameState -> Color
-randomPickColor = undefined
 -- #######################################################
 -- wildDrawFour effect:
 --Player declares next color to be matched; next player in sequence draws four cards and loses a turn. May be legally played only if the player has no cards of the current color; Wild cards and cards with the same number or symbol in a different color do not count.
