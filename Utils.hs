@@ -3,8 +3,13 @@ module Utils where
 import UnoDataModels
 
 
+--TO DO: cases:
+-- 1. no card to draw
+-- 2. not enough card to draw
+-- 3. after drawing, deck become empty 
 -- @Int Player
 drawCard :: GameState -> Int -> GameState
+drawCard game@GameState{deck=[], players=_players} usr        = game
 drawCard game@GameState{deck=(card:ds), players=_players} usr = game{deck=ds, players=p}
   where
     u@(PlayerState _ _ _ _cardsInHand) = players game !! usr

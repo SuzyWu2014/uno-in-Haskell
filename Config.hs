@@ -1,10 +1,44 @@
 module Config where
 
 import UnoDataModels
-import CardEffects
+
+-- data Card = Card { num :: Int
+--                  , clr :: Color
+--                  , cardType :: CardType
+--                  , desc :: String
+-- }
 
 cardPile :: Deck
-cardPile = undefined
+cardPile = [Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=10,clr=Yellow,cardType=Skip,desc="regular"}
+          , Card{num=10,clr=Red,cardType=Skip,desc="regular"}
+          , Card{num=10,clr=Blue,cardType=Skip,desc="regular"}
+          , Card{num=10,clr=Yellow,cardType=Skip,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          ] 
 -- cardPile =            [Card{num=Just 0, clr=Just Red,     effect=regular, cardType=Regular, desc="red 0"}]
 --         ++            [Card{num=Just 0, clr=Just Yellow,  effect=regular, cardType=Regular, desc="yellow 0"}]
 --         ++            [Card{num=Just 0, clr=Just Blue,    effect=regular, cardType=Regular, desc="blue 0"}]

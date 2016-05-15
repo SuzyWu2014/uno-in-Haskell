@@ -11,7 +11,7 @@ import Control.Monad.State
 -------------------------------------------------
 
 shuffle :: StdGen -> Deck -> Deck
-shuffle gen []      = []
+shuffle _ []        = []
 shuffle gen (x:xs)  = take ind rec ++ [x] ++ drop ind rec
     where (n, gen') = random gen :: (Int, StdGen)
           ind       = mod n $ length xs + 1
@@ -48,19 +48,23 @@ initGameState _num _name = GameState{
     deck = initDeck
 }  
 
-initGame :: Int -> String -> Game ()
-initGame _num _name = do
-    put (initGameState _num _name)
-    game <- get
-    dealCards 5 game
+dealCards :: GameState -> GameState
+dealCards game@GameState{players=_players} = dealing (length _players -1) game
 
-dealCards :: Int -> GameState -> Game ()
-dealCards _num game@GameState{players=_players, deck=_deck} = 
-    if _num >= 0 then do
-        let game'  = drawCards 5 game _num
-        dealCards (_num-1) game' 
-    else
-        put game
+-- @Int num of players 
+dealing :: Int -> GameState -> GameState
+dealing _num game@GameState{players=_players, deck=_deck} 
+                                | _num >= 0 =  dealing (_num-1) (drawCards 5 game _num) 
+                                | otherwise = game                         
+
+-- dealCards :: Int -> GameState -> Game ()
+-- dealCards _num game@GameState{players=_players, deck=_deck} = 
+--     if _num >= 0 then do
+--         let game'  = drawCards 5 game _num
+--         dealCards (_num-1) game' 
+--     else
+--         put game
+
 -------------------------------------------------
 -- Game State print
 -------------------------------------------------
