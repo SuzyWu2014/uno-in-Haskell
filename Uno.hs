@@ -16,12 +16,9 @@ simGame _game = do
        lift $ putStrLn "Dealing cards: each player gets 5 cards..."
        lift $ print $ dealCards _game
        put $ dealCards _game
-       runEffect Skip
+       runEffect Wild
        game <- get 
        lift $ print game
-       lift $ putStrLn "pick a color..."
-       _color <- lift getLine
-       lift $ print _color
 
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
