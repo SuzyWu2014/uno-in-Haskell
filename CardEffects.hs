@@ -15,20 +15,11 @@ dropCard  _card@Card{cardType=_cardType} = do
 
 showDropCard :: Card -> Game()
 showDropCard _card = do 
-      lift $ putStrLn "----------------------------------------------------"
       game <- get 
       if robotPlayer game then
          lift $ putStrLn $ getCurrPlayerName game ++ " dropped " ++ show _card 
       else 
          lift $ putStrLn $ "You dropped " ++ show _card
-
-getCurrPlayerName :: GameState -> String
-getCurrPlayerName game@GameState{whoseTurn=_whoseTurn, players=_players} = getPlayerName _players _whoseTurn
-
-getPlayerName :: [PlayerState] -> Int -> String
-getPlayerName [] _                                  = " "
-getPlayerName (PlayerState _id _name _ _:ps) _whoseTurn = if _id == _whoseTurn then _name
-                                                      else getPlayerName ps _whoseTurn
 
 
 updateCard :: Card -> GameState -> GameState
@@ -57,7 +48,7 @@ skip game = do
 -- @Int next ith turn
 -- @Int playerID of next turn 
 nextTurn :: Int -> GameState -> Int
-nextTurn 0 game@GameState{whoseTurn=_whoseTurn}= _whoseTurn
+nextTurn 0 game= whoseTurn game
 nextTurn i game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = nextTurn (i-1) game{whoseTurn = getNextTurn _whoseTurn _players _dir}
 
 -- @int Current turn
@@ -138,7 +129,7 @@ showNextTurn = do
       lift $ putStrLn "----------------------------------------------------"
 
 robotPlayer :: GameState -> Bool
-robotPlayer  game@GameState{whoseTurn=_whoseTurn, realPlayer=_realPlayer} = _whoseTurn /= _realPlayer
+robotPlayer  game = whoseTurn game /= realPlayer game
 
 askForColor :: GameState -> Game ()
 askForColor game = do 

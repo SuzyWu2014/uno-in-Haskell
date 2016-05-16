@@ -4,7 +4,8 @@ import UnoDataModels
 import Utils
 import Config
 import System.Random
--- import Control.Monad.State
+import Control.Monad.State
+import Control.Monad
 
 -------------------------------------------------
 -- Game initialization
@@ -57,20 +58,25 @@ dealing _num game@GameState{players=_players, deck=_deck}
                                 | _num >= 0 =  dealing (_num-1) (drawCards 5 game _num) 
                                 | otherwise = game                         
 
--- dealCards :: Int -> GameState -> Game ()
--- dealCards _num game@GameState{players=_players, deck=_deck} = 
---     if _num >= 0 then do
---         let game'  = drawCards 5 game _num
---         dealCards (_num-1) game' 
---     else
---         put game
+setStartingCard :: Game ()
+setStartingCard = do 
+    game@GameState{deck=_deck} <- get 
+    put game{currCard=head _deck, deck=tail _deck}
 
 -------------------------------------------------
 -- Game State print
 -------------------------------------------------
-showState :: GameState -> String
-showState = undefined
+showState :: Game ()
+showState = do 
+    game <- get 
+    lift $ putStr $ "Current Direction - " ++ show (dir game) ++"\n"
+    lift $ putStr $ "Current Card - " ++ show (currCard game) ++"\n"
+    let _currCard = currCard game
+    Control.Monad.when
+      (cardType _currCard == Wild || cardType _currCard == WildDrawFour)
+      $ lift $ putStr $ "Current Color - " ++ show (currClr game) ++ "\n"
 
+    
 showCurrentPlayerInfo :: GameState -> String
 showCurrentPlayerInfo = undefined
 
@@ -83,21 +89,25 @@ showCardsInHand = undefined
 -------------------------------------------------
 -- Each playing turn
 -------------------------------------------------
+isOver :: GameState -> Bool
+isOver game =  null (deck game) || isEscaped (players game)
+    
 
+isEscaped :: [PlayerState] -> Bool
+isEscaped [] = False
+isEscaped (PlayerState _ _ _ _cards:_players) = null _cards || isEscaped _players
 
-playableCard :: [(Int, Card)] -> [(Int, Card)]
-playableCard = undefined
+-- getPlayableCardList :: GameState -> [Card]
+-- getPlayableCardList game{whoseTurn=_whoseTurn, players=_players} = playableCardListSubStep 
 
-matchColor :: Card -> Bool
-matchColor = undefined
+isMatch :: Card -> Card -> Bool
+isMatch _card _currCard = num _card == num _currCard || clr _card == clr _currCard
 
-matchNum :: Card -> Bool
-matchNum = undefined
-
-
+-- @Int Player ID
+getCurrPlayer :: Int -> GameState -> PlayerState
+getCurrPlayer _id game@GameState{players=(p:_players)} = if _id == _pId then p else getCurrPlayer _id game{players=_players}
+     where _pId = UnoDataModels.id p
 -- IO pick an color and update GameState
-pickColor :: GameState -> GameState
-pickColor = undefined
 
 checkUno :: Int -> Bool
 checkUno = undefined
@@ -114,8 +124,6 @@ checkWinner = undefined
 updateScore :: PlayerState -> PlayerState
 updateScore = undefined
 
-isOver :: GameState -> Bool
-isOver = undefined
 
 -------------------------------------------------
 -- AI playing

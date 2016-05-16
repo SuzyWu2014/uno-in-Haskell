@@ -8,9 +8,9 @@ data CardType = Skip
               | Wild
               | WildDrawFour
               | Regular  
-              deriving(Show)
+              deriving(Show, Eq)
 data Color = Yellow | Red | Blue | Green | PickAColor
-            deriving(Show)
+            deriving(Show, Eq)
             
 colors :: [Color]
 colors = [Yellow, Red, Blue, Green]
@@ -31,7 +31,7 @@ instance Show Card where
                     | otherwise = show t ++ "("++show nm++", "++show cr++")"++ "\n"
 
 data Direction = Clockwise | CounterClockwise
-                deriving(Show)    
+                deriving(Show, Eq)    
 
 data PlayerState =  PlayerState{
       id :: Int

@@ -33,4 +33,11 @@ drawCards n game usr = drawCards (n-1) (drawCard game usr) usr
 genRanInt :: Int -> Int
 genRanInt _ = 1
 
+getCurrPlayerName :: GameState -> String
+getCurrPlayerName game = getPlayerName (players game) (whoseTurn game)
+
+getPlayerName :: [PlayerState] -> Int -> String
+getPlayerName [] _                                  = " "
+getPlayerName (PlayerState _id _name _ _:ps) _whoseTurn = if _id == _whoseTurn then _name
+                                                      else getPlayerName ps _whoseTurn
 
