@@ -4,8 +4,8 @@ import UnoDataModels
 import Utils
 import Control.Monad.Trans
 import Control.Monad.Trans.State
--- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 
+-- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 dropCard :: Card -> Game ()
 dropCard  _card@Card{cardType=_cardType} = do  
     showDropCard _card
@@ -96,7 +96,8 @@ drawTwo  game = do
     _nextTurn = nextTurn 1 game   
 
 -- #######################################################
--- reverse effect - Order of play switches directions (clockwise to counterclockwise, and vice versa)
+-- reverse effect - 
+--     Order of play switches directions (clockwise to counterclockwise, and vice versa)
 -- #######################################################
 reverseD :: GameState -> Game()
 reverseD game@GameState{whoseTurn=_whoseTurn,players=_players, dir=_dir} = do 
@@ -112,30 +113,29 @@ reverseDir Clockwise        = CounterClockwise
 reverseDir CounterClockwise = Clockwise
 
 -- #######################################################
--- wild effect - Player declares next color to be matched (may be used on any turn even if the player has matching color)
+-- wild effect - 
+--      Player declares next color to be matched 
 -- #######################################################
 wild :: GameState -> Game ()
-wild game = if robotPlayer game 
-     then do
+wild game = do
+    if robotPlayer game  then do
       let _currClr = colors !! genRanInt 3
       put game{whoseTurn=nextTurn 1 game,currClr = _currClr } 
-      lift $ putStrLn $ show _currClr ++ " was picked!"
-      showNextTurn
-     else do
+      lift $ putStrLn $ show _currClr ++ " was picked!" 
+    else do
       askForColor game
       game' <- get
       put game'{whoseTurn=nextTurn 1 game} 
-      showNextTurn
+    showNextTurn
 
 showNextTurn :: Game ()
 showNextTurn = do 
       game <- get 
-      if robotPlayer game then do
+      if robotPlayer game then 
         lift $ putStrLn $ "Next turn goes to " ++ getCurrPlayerName game
-        lift $ putStrLn "----------------------------------------------------"
-      else do
+      else 
         lift $ putStrLn $ "It's your turn, " ++ getCurrPlayerName game ++ "!"
-        lift $ putStrLn "----------------------------------------------------"
+      lift $ putStrLn "----------------------------------------------------"
 
 robotPlayer :: GameState -> Bool
 robotPlayer  game@GameState{whoseTurn=_whoseTurn, realPlayer=_realPlayer} = _whoseTurn /= _realPlayer
@@ -151,8 +151,10 @@ askForColor game = do
 
 -- #######################################################
 -- wildDrawFour effect:
---Player declares next color to be matched; next player in sequence draws four cards and loses a turn.
--- May be legally played only if the player has no cards of the current color; Wild cards and cards with the same number or symbol in a different color do not count.
+--    Player declares next color to be matched; 
+--    next player in sequence draws four cards and loses a turn.
+--    May be legally played only if the player has no cards of the current color;
+--    Wild cards and cards with the same number or symbol in a different color do not count.
 -- #######################################################
 wildDrawFour :: GameState -> Game ()
 wildDrawFour game = do 
@@ -161,14 +163,13 @@ wildDrawFour game = do
       let game' = drawCards 4 game (nextTurn 1 game)
       let _currClr = colors !! genRanInt 3
       put game'{whoseTurn=nextTurn 2 game, currClr=_currClr }  
-      lift $ putStrLn $ show _currClr ++ " was picked!"
-      showNextTurn
+      lift $ putStrLn $ show _currClr ++ " was picked!" 
     else do
       put $ drawCards 4 game (nextTurn 1 game)
       askForColor game    
       game' <- get      
       put game'{whoseTurn=nextTurn 2 game} 
-      showNextTurn
+    showNextTurn
 
 -- #######################################################
 -- regular card effect - Move to next player
