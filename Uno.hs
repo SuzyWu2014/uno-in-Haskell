@@ -10,16 +10,16 @@ import Control.Monad
  
 
 -- main game process goes here
-simGame :: GameState -> Game ()
-simGame _game = do
+simGame :: Game ()
+simGame = do
     lift $ putStrLn "Dealing cards: each player gets 5 cards..."
-    put  $ dealCards _game
+    modify dealCards 
     lift $ putStrLn "----------------------------------------------------"
+    _game <- get
     lift $ putStrLn  $ "Starting from " ++ getCurrPlayerName _game
     setStartingCard 
     goPlay   
         
-
 goPlay :: Game ()
 goPlay  = do
     showState
@@ -42,7 +42,7 @@ uno = do
     let init_state = initGameState _num _name 
        in do
         putStrLn "Starting Game..."  
-        evalStateT (simGame init_state)  init_state
+        evalStateT simGame init_state
         return ()
     putStrLn "Game is over."
 

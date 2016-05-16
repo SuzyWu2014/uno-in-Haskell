@@ -5,7 +5,7 @@ import Utils
 import Config
 import System.Random
 import Control.Monad.State
-import Control.Monad
+-- import Control.Monad
 
 -------------------------------------------------
 -- Game initialization
@@ -40,8 +40,7 @@ pickStarter _num = div _num 2
 
 initGameState :: Int -> String -> GameState
 initGameState _num _name = GameState{
-    dir = Clockwise,
-    currClr = Green,
+    dir = Clockwise, 
     realPlayer = _num,
     currCard = head initDeck, -- for test purpose
     whoseTurn  = pickStarter _num,
@@ -55,7 +54,7 @@ dealCards game@GameState{players=_players} = dealing (length _players -1) game
 -- @Int num of players 
 dealing :: Int -> GameState -> GameState
 dealing _num game@GameState{players=_players, deck=_deck} 
-                                | _num >= 0 =  dealing (_num-1) (drawCards 5 game _num) 
+                                | _num >= 0 =  dealing (_num-1) (drawCards 5 _num game ) 
                                 | otherwise = game                         
 
 setStartingCard :: Game ()
@@ -64,31 +63,9 @@ setStartingCard = do
     put game{currCard=head _deck, deck=tail _deck}
 
 -------------------------------------------------
--- Game State print
--------------------------------------------------
-showState :: Game ()
-showState = do 
-    game <- get 
-    lift $ putStr $ "Current Direction - " ++ show (dir game) ++"\n"
-    lift $ putStr $ "Current Card - " ++ show (currCard game) ++"\n"
-    let _currCard = currCard game
-    Control.Monad.when
-      (cardType _currCard == Wild || cardType _currCard == WildDrawFour)
-      $ lift $ putStr $ "Current Color - " ++ show (currClr game) ++ "\n"
-
-    
-showCurrentPlayerInfo :: GameState -> String
-showCurrentPlayerInfo = undefined
-
-showCurrentCard :: GameState -> String
-showCurrentCard = undefined
-
-showCardsInHand :: [(Int, Card)] -> String
-showCardsInHand = undefined
-
--------------------------------------------------
 -- Each playing turn
 -------------------------------------------------
+
 isOver :: GameState -> Bool
 isOver game =  null (deck game) || isEscaped (players game)
     
@@ -107,6 +84,10 @@ isMatch _card _currCard = num _card == num _currCard || clr _card == clr _currCa
 getCurrPlayer :: Int -> GameState -> PlayerState
 getCurrPlayer _id game@GameState{players=(p:_players)} = if _id == _pId then p else getCurrPlayer _id game{players=_players}
      where _pId = UnoDataModels.id p
+
+-- playableCardListSubStep :: Card -> PlayerState -> [Card]
+-- playableCardListSubStep _currCard _player =  
+
 -- IO pick an color and update GameState
 
 checkUno :: Int -> Bool
