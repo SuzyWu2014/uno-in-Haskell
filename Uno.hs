@@ -10,15 +10,29 @@ import Control.Monad.Trans.State
 
 -- main game process goes here
 simGame :: GameState -> Game ()
-simGame _game = do
-       lift $ putStrLn "Starting Game..."
-       lift $ print _game
-       lift $ putStrLn "Dealing cards: each player gets 5 cards..."
-       lift $ print $ dealCards _game
-       put $ dealCards _game
-       runEffect Wild
-       game <- get 
-       lift $ print game
+simGame _game@GameState{deck=_deck} = 
+        if  not (null _deck) then do
+            put _game
+            dropCard $ _deck !! 1
+            dropCard $ _deck !! 2
+            dropCard $ _deck !! 3
+            dropCard $ _deck !! 4
+            dropCard $ _deck !! 5
+            dropCard $ _deck !! 6
+            dropCard $ _deck !! 7
+            dropCard $ _deck !! 8
+            dropCard $ _deck !! 4
+            dropCard $ _deck !! 5
+            dropCard $ _deck !! 6
+            dropCard $ _deck !! 7
+            dropCard $ _deck !! 8
+            -- game <- get
+            -- simGame game
+        else 
+           return ()
+        
+       -- game <- get 
+       -- lift $ print game
 
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
@@ -32,8 +46,11 @@ uno = do
     --run game
     let _num = read _numStr :: Int
     let init_state = initGameState _num _name 
+    putStrLn "Starting Game..." 
+    putStrLn "Dealing cards: each player gets 5 cards..."
+    let gameState = dealCards init_state
         in do
-            evalStateT (simGame init_state)  init_state
+            evalStateT (simGame gameState)  gameState
             return ()
     putStrLn "Game is over."
 

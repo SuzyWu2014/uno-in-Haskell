@@ -9,34 +9,64 @@ import UnoDataModels
 -- }
 
 cardPile :: Deck
-cardPile = [Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+cardPile = [Card{num=0,clr=Yellow,cardType=Wild,desc="regular"}
           , Card{num=10,clr=Yellow,cardType=Skip,desc="regular"}
           , Card{num=10,clr=Red,cardType=Skip,desc="regular"}
-          , Card{num=10,clr=Blue,cardType=Skip,desc="regular"}
+          , Card{num=10,clr=Blue,cardType=WildDrawFour,desc="regular"}
           , Card{num=10,clr=Yellow,cardType=Skip,desc="regular"}
           , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
           , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Wild,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Reverse,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=10,clr=Yellow,cardType=Skip,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Wild,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Reverse,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=10,clr=Yellow,cardType=Skip,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Wild,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Reverse,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=10,clr=Yellow,cardType=Skip,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=Wild,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Reverse,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Wild,desc="regular"} 
+          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=WildDrawFour,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=WildDrawFour,desc="regular"}
+          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=1,clr=Yellow,cardType=Skip,desc="regular"}
+          , Card{num=2,clr=Yellow,cardType=Reverse,desc="regular"} 
           , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
           , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=5,clr=Yellow,cardType=Wild,desc="regular"}
           , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
           , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
           , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
-          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
-          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=0,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=1,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=2,clr=Yellow,cardType=Regular,desc="regular"} 
-          , Card{num=3,clr=Yellow,cardType=Regular,desc="regular"}
-          , Card{num=4,clr=Yellow,cardType=Regular,desc="regular"}
+          , Card{num=3,clr=Yellow,cardType=Reverse,desc="regular"}
+          , Card{num=4,clr=Yellow,cardType=WildDrawFour,desc="regular"}
           , Card{num=5,clr=Yellow,cardType=Regular,desc="regular"}
           ] 
 -- cardPile =            [Card{num=Just 0, clr=Just Red,     effect=regular, cardType=Regular, desc="red 0"}]

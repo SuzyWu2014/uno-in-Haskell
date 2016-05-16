@@ -94,9 +94,6 @@ matchColor = undefined
 matchNum :: Card -> Bool
 matchNum = undefined
 
---IO choose card to play and perform the effect
-dropCard :: GameState -> GameState
-dropCard = undefined
 
 -- IO pick an color and update GameState
 pickColor :: GameState -> GameState
