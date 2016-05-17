@@ -8,15 +8,16 @@ data CardType = Skip
               | Wild
               | WildDrawFour
               | Regular  
-              deriving(Show, Eq)
+              deriving(Show, Eq, Enum)
+              
 data Color = Yellow | Red | Blue | Green | PickAColor
-            deriving(Show, Eq)
+            deriving(Show, Eq, Enum)
             
 colors :: [Color]
 colors = [Yellow, Red, Blue, Green]
 
 -- num - The score of the card. If there is a regular card, it is also the number shown in the card.
--- clr - The color of the card; NoColor indicates Wild or WildDrawFour
+-- clr - The color of the card; PickAColor indicates Wild or WildDrawFour
 -- cardType - indicate the type of the card
 -- desc: the abilities of the card
 data Card = Card { num :: Int
