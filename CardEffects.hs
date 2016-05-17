@@ -8,9 +8,9 @@ import Control.Monad.Trans.State
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 dropCard :: Card -> Game ()
 dropCard  _card@Card{cardType=_cardType} = do  
-    showDropCard _card
-    modify $ updateCurrCard _card 
-    runEffect _cardType
+  showDropCard _card
+  modify $ updateCurrCard _card 
+  runEffect _cardType
 
 updateCurrCard :: Card -> GameState -> GameState
 updateCurrCard _card game = game{currCard=_card}
@@ -40,12 +40,12 @@ skip = do
 -- need to update whoseTurn
 drawTwo :: Game ()
 drawTwo = do 
-    setNextTurn 1
-    game <- get
-    modify $ drawCards 2 $ whoseTurn game
-    setNextTurn 1
-    lift $ putStrLn "Next player in sequence draws two cards and misses a turn!"
-    showNextTurn 
+  setNextTurn 1
+  game <- get
+  modify $ drawCards 2 $ whoseTurn game
+  setNextTurn 1
+  lift $ putStrLn "Next player in sequence draws two cards and misses a turn!"
+  showNextTurn 
 
 -- #######################################################
 -- reverse effect - 
@@ -53,11 +53,11 @@ drawTwo = do
 -- #######################################################
 reverseD :: Game ()
 reverseD = do 
-    game <- get
-    put game{dir=reverseDir (dir game)} 
-    setNextTurn 1
-    lift $ putStrLn "Direction reversed!"
-    showNextTurn
+  game <- get
+  put game{dir=reverseDir (dir game)} 
+  setNextTurn 1
+  lift $ putStrLn "Direction reversed!"
+  showNextTurn
 
 -- #######################################################
 -- wild effect - 
@@ -65,9 +65,9 @@ reverseD = do
 -- #######################################################
 wild :: Game ()
 wild  = do
-    pickColor
-    setNextTurn 1
-    showNextTurn
+  pickColor
+  setNextTurn 1
+  showNextTurn
 
 -- #######################################################
 -- wildDrawFour effect:
@@ -78,13 +78,13 @@ wild  = do
 -- #######################################################
 wildDrawFour :: Game ()
 wildDrawFour = do 
-    lift $ putStrLn "Next player in sequence draws four cards and loses a turn"
-    pickColor
-    setNextTurn 1
-    _game <- get
-    modify $ drawCards 4 $ whoseTurn _game
-    setNextTurn 1
-    showNextTurn
+  lift $ putStrLn "Next player in sequence draws four cards and loses a turn"
+  pickColor
+  setNextTurn 1
+  _game <- get
+  modify $ drawCards 4 $ whoseTurn _game
+  setNextTurn 1
+  showNextTurn
 
 -- #######################################################
 -- regular card effect - Move to next player
@@ -97,8 +97,8 @@ regular = setNextTurn 1 >> showNextTurn
 -- #######################################################    
 setNextTurn :: Int -> Game ()
 setNextTurn i = do 
-   game <- get
-   put game{whoseTurn=nextTurn i game}
+  game <- get
+  put game{whoseTurn=nextTurn i game}
 
 pickColor :: Game ()
 pickColor = do

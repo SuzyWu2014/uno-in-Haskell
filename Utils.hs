@@ -20,7 +20,7 @@ getPlayerName :: Int -> GameState -> String
 getPlayerName i game = doGetPlayerName i (players game ) 
 
 doGetPlayerName :: Int -> [PlayerState] -> String
-doGetPlayerName  _   []                               = " "
+doGetPlayerName  _   []                               = "Error"
 doGetPlayerName _playerId (PlayerState _id _name _ _:ps)  = if _id == _playerId then _name
                                                       else doGetPlayerName  _playerId ps
 
