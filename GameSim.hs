@@ -22,8 +22,13 @@ initDeck :: Deck
 initDeck = shuffle (mkStdGen 1) cardPile
 
 initPlayer :: Int -> String -> PlayerState
-initPlayer _id _name = PlayerState _id _name 0 []
-
+initPlayer _id _name = PlayerState{
+    pId          = _id,
+    name       = _name,
+    cardsInHand = [],
+    isUno       = False,
+    score       = 0
+} 
 initRobotPlayers :: Int -> [PlayerState]
 initRobotPlayers 0 = []
 initRobotPlayers _num = initRobotPlayers (_num-1) ++ [initPlayer _id (initRobotPlayerName _id) ]
@@ -42,7 +47,8 @@ initGameState _num _name = GameState{
     currCard = head initDeck, -- for test purpose
     whoseTurn  = pickStarter _num,
     players = initPlayer _num _name :initRobotPlayers _num,
-    deck = initDeck
+    deck = initDeck,
+    isOver = False
 }  
 
 dealCards :: GameState -> GameState
@@ -63,13 +69,14 @@ setStartingCard = do
 -- Each playing turn
 -------------------------------------------------
 
-isOver :: GameState -> Bool
-isOver game =  null (deck game) || isEscaped (players game)
+-- isOver :: GameState -> Bool
+-- isOver game =  null (deck game) || isEscaped (players game)
     
-isEscaped :: [PlayerState] -> Bool
-isEscaped = foldr ((||) . null . cardsInHand) False
+-- isEscaped :: [PlayerState] -> Bool
+-- isEscaped = foldr ((||) . null . cardsInHand) False
 -- isEscaped [] = False
 -- isEscaped (p:_players) = null (cardsInHand p) || isEscaped _players
+
 
 getPlayableCards :: Int -> GameState -> [Card]
 getPlayableCards _playerId game = doGetPlayableCards (currCard game) (getPlayerCards _playerId game)
@@ -80,14 +87,34 @@ doGetPlayableCards _currCard = filter (isMatch _currCard)
 isMatch :: Card -> Card -> Bool
 isMatch _currCard _card = num _card == num _currCard || clr _card == clr _currCard
 
--- playTurn :: Game ()
--- playTurn = do
---     game <- get
---     let _playableCards = getPlayableCards (whoseTurn game) game
---     if isRobotPlayer game then
---        if null _playableCards then
-        
+
+
 --     then 
+
+-- get playable cards
+--   if empty then
+--          draw new card
+--          get playable cards
+--          if empty then 
+--                  end
+--          else drop new card
+--
+--   else
+--      choose one 
+--   
+--   check if win
+
+-- Display 
+--  Case 1: from playable cards:
+--         -- Robot: drop ..
+--         -- Real: Ask to pick one
+--  Case 2: Draw new card
+--         -- show: no card matched in hand, draw new card
+--         -- new card matched!
+--            -- robot drop card
+--            -- real: ask to drop
+--        
+
 -- IO pick an color and update GameState
 
 checkUno :: Int -> Bool

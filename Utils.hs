@@ -21,7 +21,7 @@ getPlayerName i game = doGetPlayerName i (players game )
 
 doGetPlayerName :: Int -> [PlayerState] -> String
 doGetPlayerName  _   []                               = "Error"
-doGetPlayerName _playerId (PlayerState _id _name _ _:ps)  = if _id == _playerId then _name
+doGetPlayerName _playerId (p:ps)  = if pId p == _playerId then name p
                                                       else doGetPlayerName  _playerId ps
 
 getPlayerState :: Int -> GameState -> PlayerState
@@ -72,7 +72,7 @@ drawCard :: Int -> GameState -> GameState
 drawCard _ game@GameState{deck=[], players=_players}         = game
 drawCard usr game@GameState{deck=(card:ds), players=_players}  = game{deck=ds, players=p}
   where
-    u@(PlayerState _ _ _ _cardsInHand) = players game !! usr
+    u@PlayerState{cardsInHand=_cardsInHand} = players game !! usr
     p = take usr _players ++ [u{cardsInHand=card:_cardsInHand}] ++
         drop (usr+1) _players
 

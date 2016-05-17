@@ -27,6 +27,25 @@ goPlay  = do
     dropCard $ head $ deck game
     goPlay
 
+playTurn :: Game ()
+playTurn = do
+    game <- get
+    let _playableCards = getPlayableCards (whoseTurn game) game
+    if null _playableCards then do
+        modify $ drawCard $ whoseTurn game
+        game' <- get
+        let _newPlayableCards = getPlayableCards (whoseTurn game') game'
+        if null _newPlayableCards then do
+            lift $ putStrLn "No card to Drop!"
+            setNextTurn 1
+            showNextTurn
+        else do
+            let _card = head _newPlayableCards
+            dropCard _card
+    else do
+        let _card = _playableCards !! genRanInt (length _playableCards)
+        dropCard _card
+
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
 uno = do
