@@ -10,6 +10,32 @@ isRobotPlayer :: GameState -> Bool
 isRobotPlayer  game = whoseTurn game /= realPlayer game
 
 -------------------------------------------------
+-- Info Retrieving
+-------------------------------------------------
+getCurrPlayerName :: GameState -> String
+getCurrPlayerName game = getPlayerName (whoseTurn game) game
+
+-- @Int Player ID
+getPlayerName :: Int -> GameState -> String
+getPlayerName i game = doGetPlayerName i (players game ) 
+
+doGetPlayerName :: Int -> [PlayerState] -> String
+doGetPlayerName  _   []                               = "Error"
+doGetPlayerName _playerId (PlayerState _id _name _ _:ps)  = if _id == _playerId then _name
+                                                      else doGetPlayerName  _playerId ps
+
+getPlayerState :: Int -> GameState -> PlayerState
+getPlayerState _playerId game = players game !! _playerId
+
+-- doGetPlayerState :: Int -> [PlayerState] -> PlayerState 
+-- doGetPlayerState _playerId (p:_players) 
+--                                 | _playerId == UnoDataModels.id p = p 
+--                                 | otherwise = doGetPlayerState _playerId _players
+
+getPlayerCards :: Int -> GameState -> [Card]
+getPlayerCards _playerId game = cardsInHand (getPlayerState _playerId game)
+
+-------------------------------------------------
 -- Display
 -------------------------------------------------
 showState :: Game ()
@@ -87,6 +113,7 @@ dirt CounterClockwise = -1
 reverseDir :: Direction -> Direction
 reverseDir Clockwise        = CounterClockwise
 reverseDir CounterClockwise = Clockwise
+
 -------------------------------------------------
 -- Helper
 -------------------------------------------------
@@ -95,11 +122,4 @@ reverseDir CounterClockwise = Clockwise
 genRanInt :: Int -> Int
 genRanInt _ = 1
 
-getCurrPlayerName :: GameState -> String
-getCurrPlayerName game = getPlayerName (players game) (whoseTurn game)
-
-getPlayerName :: [PlayerState] -> Int -> String
-getPlayerName [] _                                  = " "
-getPlayerName (PlayerState _id _name _ _:ps) _whoseTurn = if _id == _whoseTurn then _name
-                                                      else getPlayerName ps _whoseTurn
 
