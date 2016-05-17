@@ -56,4 +56,6 @@ type Game = StateT GameState IO
 
 type Deck = [Card]
 
+playerNames::[String]
+playerNames = ["Alice", "Joe", "Mike", "Emily"]
 

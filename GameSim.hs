@@ -26,14 +26,11 @@ initPlayer _id _name = PlayerState _id _name 0 []
 
 initRobotPlayers :: Int -> [PlayerState]
 initRobotPlayers 0 = []
-initRobotPlayers _num = initPlayer _id (getRobotPlayerName _id) : initRobotPlayers (_num-1) 
+initRobotPlayers _num = initRobotPlayers (_num-1) ++ [initPlayer _id (initRobotPlayerName _id) ]
     where _id = _num - 1 --index: 0 - num-1
 
-getRobotPlayerName :: Int -> String
-getRobotPlayerName _id = playerNames !! _id
-
-playerNames::[String]
-playerNames = ["Alice", "Joe", "Mike", "Emily"]
+initRobotPlayerName :: Int -> String
+initRobotPlayerName _id = playerNames !! _id
 
 pickStarter :: Int -> Int
 pickStarter _num = div _num 2
@@ -69,25 +66,28 @@ setStartingCard = do
 isOver :: GameState -> Bool
 isOver game =  null (deck game) || isEscaped (players game)
     
-
 isEscaped :: [PlayerState] -> Bool
-isEscaped [] = False
-isEscaped (PlayerState _ _ _ _cards:_players) = null _cards || isEscaped _players
+isEscaped = foldr ((||) . null . cardsInHand) False
+-- isEscaped [] = False
+-- isEscaped (p:_players) = null (cardsInHand p) || isEscaped _players
 
--- getPlayableCardList :: GameState -> [Card]
--- getPlayableCardList game{whoseTurn=_whoseTurn, players=_players} = playableCardListSubStep 
+getPlayableCards :: Int -> GameState -> [Card]
+getPlayableCards _playerId game = doGetPlayableCards (currCard game) (getPlayerCards _playerId game)
+
+doGetPlayableCards :: Card -> [Card] -> [Card]
+doGetPlayableCards _currCard = filter (isMatch _currCard)
 
 isMatch :: Card -> Card -> Bool
-isMatch _card _currCard = num _card == num _currCard || clr _card == clr _currCard
+isMatch _currCard _card = num _card == num _currCard || clr _card == clr _currCard
 
--- @Int Player ID
-getCurrPlayer :: Int -> GameState -> PlayerState
-getCurrPlayer _id game@GameState{players=(p:_players)} = if _id == _pId then p else getCurrPlayer _id game{players=_players}
-     where _pId = UnoDataModels.id p
-
--- playableCardListSubStep :: Card -> PlayerState -> [Card]
--- playableCardListSubStep _currCard _player =  
-
+-- playTurn :: Game ()
+-- playTurn = do
+--     game <- get
+--     let _playableCards = getPlayableCards (whoseTurn game) game
+--     if isRobotPlayer game then
+--        if null _playableCards then
+        
+--     then 
 -- IO pick an color and update GameState
 
 checkUno :: Int -> Bool

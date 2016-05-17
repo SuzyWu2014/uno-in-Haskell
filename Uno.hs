@@ -6,7 +6,7 @@ import GameSim
 import CardEffects
 import Control.Monad.Trans
 import Control.Monad.Trans.State
-import Control.Monad
+-- import Control.Monad
  
 
 -- main game process goes here
@@ -24,9 +24,8 @@ goPlay :: Game ()
 goPlay  = do
     showState
     game <- get
-    Control.Monad.when (null (deck game)) $
-      do dropCard $ head $ deck game
-         goPlay
+    dropCard $ head $ deck game
+    goPlay
 
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
