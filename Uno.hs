@@ -50,19 +50,41 @@ goPlay = do
     doCheckGameOver currTurn
 
 
--- @Int current turn
+-- @Int current player
 doDrawAndPlay:: Int -> Game()
 doDrawAndPlay _currTurn = do  
     modify $ drawCard _currTurn
     game' <- get
-    let _newPlayableCards = getPlayableCards (whoseTurn game') game'
+    let _newPlayableCards = getPlayableCards _currTurn game'
     if null _newPlayableCards then do
-        lift $ putStrLn "No card to Drop!"
+        promptNoCardtoDrop _currTurn
+        setNextTurn 1
+        showNextTurn 
+    else if isRobotPlayer game' then 
+        dropCard $ head _newPlayableCards
+    else 
+        askToDrop $ head _newPlayableCards
+
+-- @Int current player
+promptNoCardtoDrop :: Int -> Game()
+promptNoCardtoDrop _currTurn = do 
+    _game <- get 
+    if isRobotPlayer _game then 
+        lift $ putStrLn $ getPlayerName _currTurn _game ++ "has no card to drop! "
+    else 
+        lift $ putStrLn "You have no card to drop!"
+
+-- @Card newly drawed card
+askToDrop :: Card -> Game ()
+askToDrop _card = do 
+    lift $ putStrLn $ "You get a matched card: " ++ show _card
+    lift $ putStrLn "Would you like to drop it? Enter 1 for yes, 0 for no"
+    _decision <- lift getLine  
+    if  _decision `elem` ["yes","y","YES","Yes"] then 
+        dropCard _card
+    else do
         setNextTurn 1
         showNextTurn
-    else do
-        let _card = head _newPlayableCards
-        dropCard _card
 
 -- @[Card] playable card list
 doPlayFromHand:: [Card] -> Game()
