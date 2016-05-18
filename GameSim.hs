@@ -77,6 +77,12 @@ setStartingCard = do
 -- isEscaped [] = False
 -- isEscaped (p:_players) = null (cardsInHand p) || isEscaped _players
 
+-- @Int player Id
+isWin :: Int -> GameState -> Bool
+isWin _playerId game =  null $ cardsInHand $ getPlayerState _playerId game
+
+isEnd :: GameState -> Bool
+isEnd game = null (deck game) 
 
 getPlayableCards :: Int -> GameState -> [Card]
 getPlayableCards _playerId game = doGetPlayableCards (currCard game) (getPlayerCards _playerId game)
@@ -86,34 +92,6 @@ doGetPlayableCards _currCard = filter (isMatch _currCard)
 
 isMatch :: Card -> Card -> Bool
 isMatch _currCard _card = num _card == num _currCard || clr _card == clr _currCard
-
-
-
---     then 
-
--- get playable cards
---   if empty then
---          draw new card
---          get playable cards
---          if empty then 
---                  end
---          else drop new card
---
---   else
---      choose one 
---   
---   check if win
-
--- Display 
---  Case 1: from playable cards:
---         -- Robot: drop ..
---         -- Real: Ask to pick one
---  Case 2: Draw new card
---         -- show: no card matched in hand, draw new card
---         -- new card matched!
---            -- robot drop card
---            -- real: ask to drop
---        
 
 -- IO pick an color and update GameState
 
