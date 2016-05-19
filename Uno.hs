@@ -73,7 +73,7 @@ promptNoCardtoDrop _currTurn = do
     if isRobotPlayer _game then 
         lift $ putStrLn $ getPlayerName _currTurn _game ++ " has no card to drop! "
     else 
-        lift $ putStrLn "You have no card to drop!"
+        lift $ putStrLn "Draw a card from deck, and you still have no card to drop!"
 
 -- @Card newly drawed card
 askToDrop :: Card -> Int -> Game ()
@@ -113,22 +113,25 @@ doCheckGameOver :: Int -> Game()
 doCheckGameOver _currTurn = do
     game'' <- get 
     if isWin _currTurn game'' then
-        lift $ putStrLn "You Win"
+        showWinner _currTurn
     else if null $ deck game'' then do
         lift $ putStrLn "No card in Deck! Calculating scores..." 
-        showWinner
+        lift $ print $ showScores $ getScores $ players game''
+        let _winnerId = getWinnerId $ players game''
+        showWinner _winnerId
     else 
         goPlay 
 
-showWinner :: Game()
-showWinner = do 
-    _game <- get 
-    lift $ print $ showScores $ getScores $ players _game
-    let _winnerId = getWinnerId $ players _game
+-- @Int Winner ID
+showWinner :: Int -> Game()
+showWinner _winnerId = do 
+    _game <- get   
     if realPlayer _game == _winnerId then
-        lift $ putStrLn $ name (minimum (players _game)) ++ " win !!"
+        lift $ putStrLn "Congrats! You win the game!"
     else 
-        lift $ putStrLn "Congrats! You win the game"
+        lift $ putStrLn $ name (players _game !! _winnerId) ++ " win !!"
+
+
 
 -- @Int Winner ID
 getWinnerId :: [PlayerState] -> Int

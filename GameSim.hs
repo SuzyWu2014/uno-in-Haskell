@@ -80,7 +80,7 @@ setStartingCard = do
 
 -- @Int player Id
 isWin :: Int -> GameState -> Bool
-isWin _playerId game =  null $ cardsInHand $ getPlayerState _playerId game
+isWin _playerId game =  null $ cardsInHand $ players game !! _playerId
 
 isEnd :: GameState -> Bool
 isEnd game = null (deck game) 
