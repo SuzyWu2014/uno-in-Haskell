@@ -1,8 +1,8 @@
 module Utils where
 
 import UnoDataModels
-import Control.Monad.State
--- import Control.Monad
+import Control.Monad.State 
+
 -------------------------------------------------
 -- Field Checking
 -------------------------------------------------
@@ -27,11 +27,6 @@ doGetPlayerName _playerId (p:ps)  = if pId p == _playerId then name p
 getPlayerState :: Int -> GameState -> PlayerState
 getPlayerState _playerId game = players game !! _playerId
 
--- doGetPlayerState :: Int -> [PlayerState] -> PlayerState 
--- doGetPlayerState _playerId (p:_players) 
---                                 | _playerId == UnoDataModels.id p = p 
---                                 | otherwise = doGetPlayerState _playerId _players
-
 getPlayerCards :: Int -> GameState -> [Card]
 getPlayerCards _playerId game = cardsInHand (getPlayerState _playerId game)
 
@@ -53,8 +48,7 @@ showNextTurn = do
       if isRobotPlayer game then 
         lift $ putStrLn $ "           => Next turn goes to " ++ getCurrPlayerName game
       else 
-        lift $ putStrLn $ "           => It's your turn, " ++ getCurrPlayerName game ++ "!"
-      -- lift $ putStrLn "----------------------------------------------------"
+        lift $ putStrLn $ "           => It's your turn, " ++ getCurrPlayerName game ++ "!" 
 
 showDropCard :: Card -> Game()
 showDropCard _card = do 
@@ -64,6 +58,12 @@ showDropCard _card = do
       else 
          lift $ putStrLn $ "You dropped " ++ show _card
 
+showAllCardInHand :: Game ()
+showAllCardInHand = do 
+  _game <- get
+  lift $ putStrLn $ "\n"++ "Your cards:         " ++ show (cardsInHand ( players _game !! whoseTurn _game)) ++"\n"
+
+
 showDirection :: GameState -> String
 showDirection _game 
               | dir _game == Clockwise = doShowDir (players _game) ++ name (head (players _game))
@@ -72,9 +72,33 @@ showDirection _game
 doShowDir :: [PlayerState] -> String
 doShowDir [] = ""
 doShowDir (_player:_players) = name _player ++ " -> " ++ doShowDir _players 
+
+-- @Int Winner ID
+showWinner :: Int -> Game()
+showWinner _winnerId = do 
+    _game <- get   
+    if realPlayer _game == _winnerId then
+        lift $ putStrLn "Congrats! You win the game!"
+    else 
+        lift $ putStrLn $ name (players _game !! _winnerId) ++ " win !!"
+
 -------------------------------------------------
 -- Action
 -------------------------------------------------
+
+-- @Int Winner ID
+getWinnerId :: [PlayerState] -> Int
+getWinnerId _players = pId $ minimum _players
+
+showScores :: [(String, Int)] -> String
+showScores = foldr ((++).(\s ->  fst s ++ ": " ++ show (snd s) ++ " | " )) "" 
+
+getScores :: [PlayerState] -> [(String, Int)]
+getScores = map (\p -> (name p, calScore (cardsInHand p)))
+
+calScore :: [Card] -> Int 
+calScore = foldr ((+).num) 0 
+
 countTurn :: Game()
 countTurn = do 
    _game <- get 

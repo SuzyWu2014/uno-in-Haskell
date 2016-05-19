@@ -34,7 +34,7 @@ simGame = do
     lift $ putStrLn "----------------------------------------------------"
     _game <- get
     lift $ putStrLn $ "Starting from " ++ getCurrPlayerName _game 
-    lift $ putStrLn $ "Direction: " ++ doShowDir (players _game )
+    lift $ putStrLn $ "Direction: " ++ showDirection _game 
     setStartingCard 
     goPlay   
         
@@ -59,7 +59,7 @@ doDrawAndPlay _currTurn = do
     if null _newPlayableCards then do
         promptNoCardtoDrop _currTurn
         setNextTurn 1
-        showNextTurn 
+        -- showNextTurn 
     else if isRobotPlayer game' then 
         dropCard  (head _newPlayableCards) _currTurn
     else do 
@@ -72,20 +72,22 @@ promptNoCardtoDrop _currTurn = do
     _game <- get 
     if isRobotPlayer _game then 
         lift $ putStrLn $ getPlayerName _currTurn _game ++ " has no card to drop! "
-    else 
+    else do 
+        showAllCardInHand
         lift $ putStrLn "Draw a card from deck, and you still have no card to drop!"
 
 -- @Card newly drawed card
 askToDrop :: Card -> Int -> Game ()
 askToDrop _card _currTurn = do 
+    showAllCardInHand
     lift $ putStrLn $ "No card matched! Draw a card from deck.You get a matched card: " ++ show _card
     lift $ putStrLn "Would you like to drop it? Enter yes/no"
     _decision <- lift getLine  
     if  _decision `elem` ["yes","y","YES","Yes"] then 
         dropCard _card _currTurn
-    else do
+    else 
         setNextTurn 1
-        showNextTurn
+        -- showNextTurn
 
 -- @[Card] playable card list
 doPlayFromHand:: [Card] -> Int -> Game()
@@ -101,7 +103,7 @@ doPlayFromHand _cards _currTurn= do
 askToPick :: [Card] -> Int -> Game ()
 askToPick _cards _currTurn= do
     _game <- get
-    lift $ putStrLn $ "\n"++ "Your cards:         " ++ show (cardsInHand ( players _game !! whoseTurn _game))
+    showAllCardInHand 
     lift $ putStrLn $ "Cards you can drop: " ++ show _cards ++ "\n"
     lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"
     _numStr <- lift getLine
@@ -119,29 +121,7 @@ doCheckGameOver _currTurn = do
         lift $ print $ showScores $ getScores $ players game''
         let _winnerId = getWinnerId $ players game''
         showWinner _winnerId
-    else 
+    else do 
+        showNextTurn
         goPlay 
 
--- @Int Winner ID
-showWinner :: Int -> Game()
-showWinner _winnerId = do 
-    _game <- get   
-    if realPlayer _game == _winnerId then
-        lift $ putStrLn "Congrats! You win the game!"
-    else 
-        lift $ putStrLn $ name (players _game !! _winnerId) ++ " win !!"
-
-
-
--- @Int Winner ID
-getWinnerId :: [PlayerState] -> Int
-getWinnerId _players = pId $ minimum _players
-
-showScores :: [(String, Int)] -> String
-showScores = foldr ((++).(\s ->  fst s ++ ": " ++ show (snd s) ++ " | " )) "" 
-
-getScores :: [PlayerState] -> [(String, Int)]
-getScores = map (\p -> (name p, calScore (cardsInHand p)))
-
-calScore :: [Card] -> Int 
-calScore = foldr ((+).num) 0 

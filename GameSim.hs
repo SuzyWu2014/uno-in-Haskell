@@ -19,7 +19,7 @@ shuffle gen (x:xs)  = take ind rec ++ [x] ++ drop ind rec
           rec       = shuffle gen' xs
 
 initDeck :: Deck
-initDeck = shuffle (mkStdGen 100) cardPile
+initDeck = shuffle (mkStdGen 50) cardPile
 
 initPlayer :: Int -> String -> PlayerState
 initPlayer _id _name = PlayerState{

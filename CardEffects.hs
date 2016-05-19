@@ -46,10 +46,7 @@ runEffect _cardType = case _cardType of
 -- #######################################################
 
 skip :: Game ()
-skip = do
-  setNextTurn 2
-  -- lift $ putStrLn "Next player in sequence miss a turn!" 
-  showNextTurn
+skip = setNextTurn 2 
 
 -- #######################################################
 -- drawTwo effect - Next player in sequence draws two cards and misses a turn
@@ -60,9 +57,7 @@ drawTwo = do
   setNextTurn 1
   game <- get
   modify $ drawCards 2 $ whoseTurn game
-  setNextTurn 1
-  -- lift $ putStrLn "Next player in sequence draws two cards and misses a turn!"
-  showNextTurn 
+  setNextTurn 1 
 
 -- #######################################################
 -- reverse effect - 
@@ -72,9 +67,7 @@ reverseD :: Game ()
 reverseD = do 
   game <- get
   put game{dir=reverseDir (dir game)} 
-  setNextTurn 1
-  -- lift $ putStrLn "Direction reversed!"
-  showNextTurn
+  setNextTurn 1 
 
 -- #######################################################
 -- wild effect - 
@@ -83,8 +76,7 @@ reverseD = do
 wild :: Game ()
 wild  = do
   pickColor
-  setNextTurn 1
-  showNextTurn
+  setNextTurn 1 
 
 -- #######################################################
 -- wildDrawFour effect:
@@ -94,20 +86,18 @@ wild  = do
 --    Wild cards and cards with the same number or symbol in a different color do not count.
 -- #######################################################
 wildDrawFour :: Game ()
-wildDrawFour = do 
-  -- lift $ putStrLn "Next player in sequence draws four cards and loses a turn"
+wildDrawFour = do  
   pickColor
   setNextTurn 1
   _game <- get
   modify $ drawCards 4 $ whoseTurn _game
-  setNextTurn 1
-  showNextTurn
+  setNextTurn 1 
 
 -- #######################################################
 -- regular card effect - Move to next player
 -- #######################################################
 regular :: Game ()
-regular = setNextTurn 1 >> showNextTurn
+regular = setNextTurn 1  
     
 -- #######################################################
 -- Sub steps
