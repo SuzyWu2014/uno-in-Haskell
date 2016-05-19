@@ -46,7 +46,7 @@ initGameState _num _name = GameState{
     realPlayer = _num,
     currCard = head initDeck, -- for test purpose
     whoseTurn  = pickStarter _num,
-    players = initPlayer _num _name :initRobotPlayers _num,
+    players = initRobotPlayers _num ++ [initPlayer _num _name],
     deck = initDeck,
     isOver = False
 }  

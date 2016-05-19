@@ -28,9 +28,8 @@ data Card = Card { num :: Int
 
 instance Show Card where
   show (Card nm cr t d) 
-                    | nm > 9    = show t ++ ": score - " ++ show nm ++ "; color: " ++ show cr ++", effect - " ++ d ++ "\n"
-                    | otherwise = show t ++ "("++show nm++", "++show cr++")"++ "\n"
-
+                    | nm > 9    = "\n" ++ show t ++ ": score - " ++ show nm ++ "; color: " ++ show cr ++", effect - " ++ d ++ "\n"
+                    | otherwise = "\n" ++ show t ++ "("++show nm++", "++show cr++")"  ++ "\n"
 data Direction = Clockwise | CounterClockwise
                 deriving(Show, Eq)    
 
@@ -41,6 +40,12 @@ data PlayerState =  PlayerState{
     , cardsInHand :: [Card]
     , isUno :: Bool
 } deriving(Show)
+
+instance Eq PlayerState where
+  _player1 == _player2 = score _player1 == score _player2
+
+instance Ord PlayerState where
+  _player1 <= _player2 =  score _player1 <= score _player2
 
 data GameState = GameState {
       dir :: Direction

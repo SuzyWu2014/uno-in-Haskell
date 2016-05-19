@@ -120,6 +120,6 @@ reverseDir CounterClockwise = Clockwise
 -- @Int max number
 -- @Int return number in [0,max]
 genRanInt :: Int -> Int
-genRanInt _ = 1
+genRanInt _ = 0
 
 
