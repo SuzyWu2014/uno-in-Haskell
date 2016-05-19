@@ -112,7 +112,7 @@ doGetNextTurn _whoseTurn _players _dir = varifyTurnNum (_whoseTurn + dirt _dir) 
 varifyTurnNum :: Int -> Int-> Int
 varifyTurnNum _whoseTurn num_p 
                        | _whoseTurn == num_p = 0
-                       | _whoseTurn < 0      = num_p
+                       | _whoseTurn < 0      = num_p - 1
                        | otherwise           = _whoseTurn 
 
 -- turn direction into operation                            
