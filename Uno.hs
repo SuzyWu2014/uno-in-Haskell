@@ -126,16 +126,16 @@ showWinner = do
     lift $ print $ showScores $ getScores $ players _game
     let _winnerId = getWinnerId $ players _game
     if realPlayer _game == _winnerId then
-        lift $ putStrLn $ name (maximum (players _game)) ++ "win !!"
+        lift $ putStrLn $ name (minimum (players _game)) ++ " win !!"
     else 
         lift $ putStrLn "Congrats! You win the game"
 
 -- @Int Winner ID
 getWinnerId :: [PlayerState] -> Int
-getWinnerId _players = pId $ maximum _players
+getWinnerId _players = pId $ minimum _players
 
 showScores :: [(String, Int)] -> String
-showScores = foldr ((++).(\s -> show (fst s) ++ ":" ++ show (snd s) ++ "\n")) "" 
+showScores = foldr ((++).(\s ->  fst s ++ ": " ++ show (snd s) ++ " | " )) "" 
 
 getScores :: [PlayerState] -> [(String, Int)]
 getScores = map (\p -> (name p, calScore (cardsInHand p)))

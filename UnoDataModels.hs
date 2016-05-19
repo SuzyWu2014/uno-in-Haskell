@@ -28,9 +28,9 @@ data Card = Card { num :: Int
 
 instance Show Card where
   show (Card nm cr t _) 
-      | nm <= 9                    =  show t ++ "("++show nm++", "++show cr++")"  
-      | t == Skip || t == Reverse || t == DrawTwo  =  show t ++ "(" ++ show cr ++")"
-      | otherwise                  =  show t
+      | nm <= 9                    =  " "++show t ++ "("++show nm++", "++show cr++")"  
+      | t == Skip || t == Reverse || t == DrawTwo  = " "++  show t ++ "(" ++ show cr ++")"
+      | otherwise                  =  " "++show t
 
 data Direction = Clockwise | CounterClockwise
                 deriving(Show, Eq)    

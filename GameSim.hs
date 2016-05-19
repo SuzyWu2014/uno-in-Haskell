@@ -19,7 +19,7 @@ shuffle gen (x:xs)  = take ind rec ++ [x] ++ drop ind rec
           rec       = shuffle gen' xs
 
 initDeck :: Deck
-initDeck = shuffle (mkStdGen 1) cardPile
+initDeck = shuffle (mkStdGen 12) cardPile
 
 initPlayer :: Int -> String -> PlayerState
 initPlayer _id _name = PlayerState{
@@ -91,7 +91,12 @@ doGetPlayableCards :: Card -> [Card] -> [Card]
 doGetPlayableCards _currCard = filter (isMatch _currCard)
 
 isMatch :: Card -> Card -> Bool
-isMatch _currCard _card = num _card == num _currCard || clr _card == clr _currCard
+isMatch _currCard _card = case (cardType _currCard, cardType _card) of
+       (_, Wild)         -> True
+       (_, WildDrawFour) -> True
+       (_, Regular)      -> num _card == num _currCard || clr _card == clr _currCard
+       _                 -> clr _card == clr _currCard
+
 
 -- IO pick an color and update GameState
 

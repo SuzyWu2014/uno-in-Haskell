@@ -41,9 +41,9 @@ getPlayerCards _playerId game = cardsInHand (getPlayerState _playerId game)
 showState :: Game ()
 showState = do 
     game <- get 
-    lift $ putStrLn $"\n" ++"======================== Game Status ============================" ++"\n"  
+    lift $ putStrLn $ "\n" ++"======================== Game Status ============================" ++"\n"  
     lift $ putStr $ "Current Direction: " ++ showDirection game ++"\n"
-    lift $ putStr $ "Current Card: " ++ show (currCard game) ++"\n"
+    lift $ putStr $ "Current Card:      " ++ show (currCard game) ++"\n"
     
 showNextTurn :: Game ()
 showNextTurn = do 
