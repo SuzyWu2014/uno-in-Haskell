@@ -39,7 +39,7 @@ simGame = do
         
 goPlay :: Game ()
 goPlay = do
-    showState
+    -- showState
     game <- get
     let currTurn = whoseTurn game
     let _playableCards = getPlayableCards currTurn game
@@ -62,7 +62,8 @@ doDrawAndPlay _currTurn = do
         showNextTurn 
     else if isRobotPlayer game' then 
         dropCard $ head _newPlayableCards
-    else 
+    else do
+        showState
         askToDrop $ head _newPlayableCards
 
 -- @Int current player
@@ -93,17 +94,19 @@ doPlayFromHand _cards = do
     if isRobotPlayer _game then do 
         let _card = _cards !! genRanInt (length _cards) 
         dropCard _card
-    else  
+    else do 
+        showState
         askToPick _cards
 
 askToPick :: [Card] -> Game ()
 askToPick _cards = do
-    lift $ putStrLn "All your cards: \n"
-    lift $ putStrLn $ "Cards you can drop:" ++ show _cards
-    lift $ putStrLn "Please pick one card to drop:"
+    _game <- get
+    lift $ putStrLn $ "\n"++ "Your cards:         " ++ show (cardsInHand ( players _game !! whoseTurn _game))
+    lift $ putStrLn $ "Cards you can drop: " ++ show _cards ++ "\n"
+    lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"
     _numStr <- lift getLine
     let _num = read _numStr ::Int
-    dropCard $ _cards !! _num
+    dropCard $ _cards !! (_num-1)
 
 
 doCheckGameOver :: Int -> Game()

@@ -31,7 +31,7 @@ runEffect _cardType = case _cardType of
 skip :: Game ()
 skip = do
   setNextTurn 2
-  lift $ putStrLn "Next player in sequence miss a turn!" 
+  -- lift $ putStrLn "Next player in sequence miss a turn!" 
   showNextTurn
 
 -- #######################################################
@@ -44,7 +44,7 @@ drawTwo = do
   game <- get
   modify $ drawCards 2 $ whoseTurn game
   setNextTurn 1
-  lift $ putStrLn "Next player in sequence draws two cards and misses a turn!"
+  -- lift $ putStrLn "Next player in sequence draws two cards and misses a turn!"
   showNextTurn 
 
 -- #######################################################
@@ -56,7 +56,7 @@ reverseD = do
   game <- get
   put game{dir=reverseDir (dir game)} 
   setNextTurn 1
-  lift $ putStrLn "Direction reversed!"
+  -- lift $ putStrLn "Direction reversed!"
   showNextTurn
 
 -- #######################################################
@@ -78,7 +78,7 @@ wild  = do
 -- #######################################################
 wildDrawFour :: Game ()
 wildDrawFour = do 
-  lift $ putStrLn "Next player in sequence draws four cards and loses a turn"
+  -- lift $ putStrLn "Next player in sequence draws four cards and loses a turn"
   pickColor
   setNextTurn 1
   _game <- get

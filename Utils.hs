@@ -41,17 +41,18 @@ getPlayerCards _playerId game = cardsInHand (getPlayerState _playerId game)
 showState :: Game ()
 showState = do 
     game <- get 
-    lift $ putStr $ "Current Direction - " ++ show (dir game) ++"\n"
-    lift $ putStr $ "Current Card - " ++ show (currCard game) ++"\n"
+    lift $ putStrLn $"\n" ++"======================== Game Status ============================" ++"\n"  
+    lift $ putStr $ "Current Direction: " ++ showDirection game ++"\n"
+    lift $ putStr $ "Current Card: " ++ show (currCard game) ++"\n"
     
 showNextTurn :: Game ()
 showNextTurn = do 
       game <- get 
       if isRobotPlayer game then 
-        lift $ putStrLn $ "Next turn goes to " ++ getCurrPlayerName game
+        lift $ putStrLn $ "           => Next turn goes to " ++ getCurrPlayerName game
       else 
-        lift $ putStrLn $ "It's your turn, " ++ getCurrPlayerName game ++ "!"
-      lift $ putStrLn "----------------------------------------------------"
+        lift $ putStrLn $ "           => It's your turn, " ++ getCurrPlayerName game ++ "!"
+      -- lift $ putStrLn "----------------------------------------------------"
 
 showDropCard :: Card -> Game()
 showDropCard _card = do 
@@ -60,6 +61,15 @@ showDropCard _card = do
          lift $ putStrLn $ getCurrPlayerName game ++ " dropped " ++ show _card 
       else 
          lift $ putStrLn $ "You dropped " ++ show _card
+
+showDirection :: GameState -> String
+showDirection _game 
+              | dir _game == Clockwise = doShowDir (players _game) ++ name (head (players _game))
+              | otherwise = doShowDir (reverse (players _game)) ++ name (last (players _game))
+
+doShowDir :: [PlayerState] -> String
+doShowDir [] = ""
+doShowDir (_player:_players) = name _player ++ " -> " ++ doShowDir _players 
 -------------------------------------------------
 -- Action
 -------------------------------------------------
