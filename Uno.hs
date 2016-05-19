@@ -33,20 +33,20 @@ simGame = do
     modify dealCards 
     lift $ putStrLn "----------------------------------------------------"
     _game <- get
-    lift $ putStrLn  $ "Starting from " ++ getCurrPlayerName _game
+    lift $ putStrLn $ "Starting from " ++ getCurrPlayerName _game 
+    lift $ putStrLn $ "Direction: " ++ doShowDir (players _game )
     setStartingCard 
     goPlay   
         
 goPlay :: Game ()
 goPlay = do
-    -- showState
     game <- get
     let currTurn = whoseTurn game
     let _playableCards = getPlayableCards currTurn game
     if null _playableCards then 
         doDrawAndPlay currTurn
     else
-        doPlayFromHand _playableCards        
+        doPlayFromHand _playableCards currTurn       
     doCheckGameOver currTurn
 
 
@@ -61,52 +61,52 @@ doDrawAndPlay _currTurn = do
         setNextTurn 1
         showNextTurn 
     else if isRobotPlayer game' then 
-        dropCard $ head _newPlayableCards
-    else do
+        dropCard  (head _newPlayableCards) _currTurn
+    else do 
         showState
-        askToDrop $ head _newPlayableCards
+        askToDrop (head _newPlayableCards) _currTurn
 
 -- @Int current player
 promptNoCardtoDrop :: Int -> Game()
 promptNoCardtoDrop _currTurn = do 
     _game <- get 
     if isRobotPlayer _game then 
-        lift $ putStrLn $ getPlayerName _currTurn _game ++ "has no card to drop! "
+        lift $ putStrLn $ getPlayerName _currTurn _game ++ " has no card to drop! "
     else 
         lift $ putStrLn "You have no card to drop!"
 
 -- @Card newly drawed card
-askToDrop :: Card -> Game ()
-askToDrop _card = do 
-    lift $ putStrLn $ "You get a matched card: " ++ show _card
+askToDrop :: Card -> Int -> Game ()
+askToDrop _card _currTurn = do 
+    lift $ putStrLn $ "No card matched! Draw a card from deck.You get a matched card: " ++ show _card
     lift $ putStrLn "Would you like to drop it? Enter yes/no"
     _decision <- lift getLine  
     if  _decision `elem` ["yes","y","YES","Yes"] then 
-        dropCard _card
+        dropCard _card _currTurn
     else do
         setNextTurn 1
         showNextTurn
 
 -- @[Card] playable card list
-doPlayFromHand:: [Card] -> Game()
-doPlayFromHand _cards = do 
+doPlayFromHand:: [Card] -> Int -> Game()
+doPlayFromHand _cards _currTurn= do 
     _game <- get
     if isRobotPlayer _game then do 
         let _card = _cards !! genRanInt (length _cards) 
-        dropCard _card
+        dropCard _card _currTurn
     else do 
         showState
-        askToPick _cards
+        askToPick _cards _currTurn
 
-askToPick :: [Card] -> Game ()
-askToPick _cards = do
+askToPick :: [Card] -> Int -> Game ()
+askToPick _cards _currTurn= do
     _game <- get
     lift $ putStrLn $ "\n"++ "Your cards:         " ++ show (cardsInHand ( players _game !! whoseTurn _game))
     lift $ putStrLn $ "Cards you can drop: " ++ show _cards ++ "\n"
     lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"
     _numStr <- lift getLine
     let _num = read _numStr ::Int
-    dropCard $ _cards !! (_num-1)
+    dropCard (_cards !! (_num-1)) _currTurn
 
 
 doCheckGameOver :: Int -> Game()

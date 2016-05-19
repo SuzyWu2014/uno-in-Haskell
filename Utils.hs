@@ -40,8 +40,10 @@ getPlayerCards _playerId game = cardsInHand (getPlayerState _playerId game)
 -------------------------------------------------
 showState :: Game ()
 showState = do 
+    countTurn
     game <- get 
-    lift $ putStrLn $ "\n" ++"======================== Game Status ============================" ++"\n"  
+    lift $ putStrLn $ "\n" ++"======================== Game Status ============================" ++"\n" 
+    lift $ putStrLn $ "No." ++ show (ithTurn game)  
     lift $ putStr $ "Current Direction: " ++ showDirection game ++"\n"
     lift $ putStr $ "Current Card:      " ++ show (currCard game) ++"\n"
     
@@ -73,6 +75,12 @@ doShowDir (_player:_players) = name _player ++ " -> " ++ doShowDir _players
 -------------------------------------------------
 -- Action
 -------------------------------------------------
+countTurn :: Game()
+countTurn = do 
+   _game <- get 
+   let count = ithTurn _game +1
+   put _game{ithTurn=count}
+
 --TO DO: cases:
 -- 1. no card to draw
 -- 2. not enough card to draw

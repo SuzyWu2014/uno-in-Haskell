@@ -4,16 +4,33 @@ import UnoDataModels
 import Utils
 import Control.Monad.Trans
 import Control.Monad.Trans.State
+import Data.List
 
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
-dropCard :: Card -> Game ()
-dropCard  _card@Card{cardType=_cardType} = do  
+dropCard :: Card -> Int -> Game ()
+dropCard  _card@Card{cardType=_cardType} _whoseTurn = do  
   showDropCard _card
   modify $ updateCurrCard _card 
+  _game <- get
+  trashCard _card (players _game !! _whoseTurn)
   runEffect _cardType
 
 updateCurrCard :: Card -> GameState -> GameState
 updateCurrCard _card game = game{currCard=_card}
+
+trashCard:: Card -> PlayerState -> Game ()
+trashCard _card _player = do 
+    _game <- get 
+    let _cards = delete _card (cardsInHand _player)
+    let _playerNew = _player{cardsInHand=_cards}
+    let _whoseTurn = pId _player
+    let _players = players _game
+    put _game{players=take _whoseTurn _players ++ [_playerNew] ++ drop (_whoseTurn+1) _players }
+
+
+
+
+
 
 runEffect :: CardType -> Game ()
 runEffect _cardType = case _cardType of

@@ -24,13 +24,14 @@ data Card = Card { num :: Int
                  , clr :: Color
                  , cardType :: CardType
                  , desc :: String
-}
+} deriving(Eq)
 
 instance Show Card where
   show (Card nm cr t _) 
       | nm <= 9                    =  " "++show t ++ "("++show nm++", "++show cr++")"  
       | t == Skip || t == Reverse || t == DrawTwo  = " "++  show t ++ "(" ++ show cr ++")"
       | otherwise                  =  " "++show t
+
 
 data Direction = Clockwise | CounterClockwise
                 deriving(Show, Eq)    
@@ -57,6 +58,7 @@ data GameState = GameState {
     , players :: [PlayerState] 
     , deck :: [Card]
     , isOver :: Bool
+    , ithTurn :: Int
 } deriving(Show)
 
 type Game = StateT GameState IO
