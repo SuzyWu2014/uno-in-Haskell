@@ -27,11 +27,6 @@ trashCard _card _player = do
     let _players = players _game
     put _game{players=take _whoseTurn _players ++ [_playerNew] ++ drop (_whoseTurn+1) _players }
 
-
-
-
-
-
 runEffect :: CardType -> Game ()
 runEffect _cardType = case _cardType of
                           Regular       -> regular

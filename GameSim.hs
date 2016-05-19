@@ -82,9 +82,6 @@ setStartingCard = do
 isWin :: Int -> GameState -> Bool
 isWin _playerId game =  null $ cardsInHand $ players game !! _playerId
 
-isEnd :: GameState -> Bool
-isEnd game = null (deck game) 
-
 getPlayableCards :: Int -> GameState -> [Card]
 getPlayableCards _playerId game = doGetPlayableCards (currCard game) (getPlayerCards _playerId game)
 
@@ -92,14 +89,11 @@ doGetPlayableCards :: Card -> [Card] -> [Card]
 doGetPlayableCards _currCard = filter (isMatch _currCard)
 
 isMatch :: Card -> Card -> Bool
-isMatch _currCard _card = case (cardType _currCard, cardType _card) of
-       (_, Wild)         -> True
-       (_, WildDrawFour) -> True
-       (_, Regular)      -> num _card == num _currCard || clr _card == clr _currCard
-       _                 -> clr _card == clr _currCard
-
-
--- IO pick an color and update GameState
+isMatch _currCard _card = case  cardType _card of
+            Wild         -> True
+            WildDrawFour -> True
+            Regular      -> num _card == num _currCard || clr _card == clr _currCard
+            _            -> clr _card == clr _currCard
 
 checkUno :: Int -> Bool
 checkUno = undefined
@@ -115,7 +109,6 @@ checkWinner = undefined
 
 updateScore :: PlayerState -> PlayerState
 updateScore = undefined
-
 
 -------------------------------------------------
 -- AI playing
