@@ -2,6 +2,8 @@ module Utils where
 
 import UnoDataModels
 import Control.Monad.State 
+import System.IO.Unsafe (unsafePerformIO)
+import System.Random
 
 -------------------------------------------------
 -- Field Checking
@@ -161,7 +163,20 @@ reverseDir CounterClockwise = Clockwise
 -------------------------------------------------
 -- @Int max number
 -- @Int return number in [0,max]
-genRanInt :: Int -> Int
-genRanInt _ = 0
+randomInt :: Int -> Int
+randomInt n = unsafePerformIO $ getStdRandom $ randomR (0,n)
+
+
+helpinfo :: IO ()
+helpinfo = putStr $ unlines 
+          ["Helpful Commands:",
+           "/info <Card>:\tDisplay what the card does",
+           "/hand:\t\t\tDisplay cards in your hand",
+           "/help:\t\t\tDisplay this help information dialog"
+          ]
+
+
+
+
 
 
