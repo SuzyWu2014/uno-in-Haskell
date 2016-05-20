@@ -42,12 +42,12 @@ goPlay :: Game ()
 goPlay = do
     game <- get
     let currTurn = whoseTurn game
-    let _playableCards = getPlayableCards currTurn game
-    if null _playableCards then 
-        doDrawAndPlay currTurn
-    else
-        doPlayFromHand _playableCards currTurn       
-    doCheckGameOver currTurn
+    let _playableCards = getPlayableCards currTurn game 
+    if null _playableCards then  
+        doDrawAndPlay currTurn 
+    else  
+        doPlayFromHand _playableCards currTurn  
+    doCheckGameOver currTurn 
 
 
 -- @Int current player

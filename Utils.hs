@@ -164,7 +164,7 @@ reverseDir CounterClockwise = Clockwise
 -- @Int max number
 -- @Int return number in [0,max]
 randomInt :: Int -> Int
-randomInt n = unsafePerformIO $ getStdRandom $ randomR (0,n)
+randomInt n = unsafePerformIO $ getStdRandom $ randomR (0,n-1)
 
 
 helpinfo :: IO ()
