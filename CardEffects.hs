@@ -106,7 +106,7 @@ pickColor :: Game ()
 pickColor = do
   game <- get
   if isRobotPlayer game  then do
-    let _currClr = colors !! genRanInt 3
+    let _currClr = colors !! randomInt 3
     setCurrColor _currClr
     lift $ putStrLn $ show _currClr ++ " was picked!" 
   else  

@@ -39,17 +39,18 @@ initRobotPlayerName _id = playerNames !! _id
 
 pickStarter :: Int -> Int
 pickStarter _num = div _num 2
+-- pickStarter = randomInt
 
 initGameState :: Int -> String -> GameState
 initGameState _num _name = GameState{
-    dir = Clockwise, 
+    dir        = Clockwise, 
     realPlayer = _num,
-    currCard = head initDeck, -- for test purpose
+    currCard   = head initDeck, -- for test purpose
     whoseTurn  = pickStarter _num,
-    players = initRobotPlayers _num ++ [initPlayer _num _name],
-    deck = initDeck,
-    isOver = False,
-    ithTurn = 0
+    players    = initRobotPlayers _num ++ [initPlayer _num _name],
+    deck       = initDeck,
+    isOver     = False,
+    ithTurn    = 0
 }  
 
 dealCards :: GameState -> GameState

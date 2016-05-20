@@ -94,7 +94,7 @@ doPlayFromHand:: [Card] -> Int -> Game()
 doPlayFromHand _cards _currTurn= do 
     _game <- get
     if isRobotPlayer _game then do 
-        let _card = _cards !! genRanInt (length _cards) 
+        let _card = _cards !! randomInt (length _cards) 
         dropCard _card _currTurn
     else do 
         showState
