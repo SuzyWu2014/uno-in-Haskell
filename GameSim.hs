@@ -98,11 +98,11 @@ isMatch _currCard _card = case  cardType _card of
 isUno :: Int -> GameState -> Bool
 isUno _playerId _game = 1 == countPlayerHandCards _playerId _game
 
-declareUno :: Game ()
-declareUno = do 
+declareUno :: Int -> Game ()
+declareUno _playerId = do 
     _game <- get 
-    let _name = getCurrPlayerName _game
-    if isRobotPlayer _game then
+    let _name = getPlayerName _playerId _game
+    if _playerId /= realPlayer _game then
         lift $ putStrLn $ _name ++ " declares Uno!"
     else 
         lift $ putStrLn "You declare uno!"

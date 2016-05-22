@@ -115,7 +115,7 @@ askToPick _cards _currTurn= do
 doCheckUno :: Int -> Game ()
 doCheckUno _currTurn = do 
      _game <- get 
-     Control.Monad.when (isUno _currTurn _game) declareUno
+     Control.Monad.when (isUno _currTurn _game) $ declareUno _currTurn
 
 
 doCheckGameOver :: Int -> Game()
