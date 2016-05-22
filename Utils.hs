@@ -4,6 +4,7 @@ import UnoDataModels
 import Control.Monad.State 
 import System.IO.Unsafe (unsafePerformIO)
 import System.Random
+import Control.Arrow
 
 -------------------------------------------------
 -- Field Checking
@@ -13,12 +14,9 @@ isRobotPlayer  _game = whoseTurn _game /= realPlayer _game
 
 -------------------------------------------------
 -- Info Retrieving
--------------------------------------------------
+-----------------------------------------------
 getCurrPlayerName :: GameState -> String
 getCurrPlayerName _game = getPlayerName (whoseTurn _game) _game
-
-getCurrPlayerState :: GameState -> PlayerState
-getCurrPlayerState _game = players _game !! whoseTurn _game
 
 -- @Int playerId
 -- @Int #of cards in hand
@@ -88,7 +86,7 @@ showWinner :: Int -> Game()
 showWinner _winnerId = do 
     _game <- get   
     if realPlayer _game == _winnerId then
-        lift $ putStrLn "Congrats! You win the _game!"
+        lift $ putStrLn "Congrats! You win the game!"
     else 
         lift $ putStrLn $ name (players _game !! _winnerId) ++ " win !!"
 
@@ -104,7 +102,11 @@ showScores :: [(String, Int)] -> String
 showScores = foldr ((++).(\s ->  fst s ++ ": " ++ show (snd s) ++ " | " )) "" 
 
 getScores :: [PlayerState] -> [(String, Int)]
-getScores = map (\p -> (name p, calScore (cardsInHand p)))
+getScores = map (name Control.Arrow.&&& score) 
+-- getScores = map (\p -> (name p, score p))
+
+updateScores :: [PlayerState] -> [PlayerState]
+updateScores = map(\p -> p{score=calScore (cardsInHand p)})
 
 calScore :: [Card] -> Int 
 calScore = foldr ((+).num) 0 

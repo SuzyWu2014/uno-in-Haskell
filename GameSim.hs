@@ -70,14 +70,6 @@ setStartingCard = do
 -- Each playing turn
 -------------------------------------------------
 
--- isOver :: GameState -> Bool
--- isOver game =  null (deck game) || isEscaped (players game)
-    
--- isEscaped :: [PlayerState] -> Bool
--- isEscaped = foldr ((||) . null . cardsInHand) False
--- isEscaped [] = False
--- isEscaped (p:_players) = null (cardsInHand p) || isEscaped _players
-
 -- @Int player Id
 isWin :: Int -> GameState -> Bool
 isWin _playerId game =  null $ cardsInHand $ players game !! _playerId
@@ -107,6 +99,12 @@ declareUno _playerId = do
     else 
         lift $ putStrLn "You declare uno!"
 
+
+calScores :: [PlayerState] -> Game ()
+calScores _players = do 
+        _game <- get
+        let _players_new = updateScores _players
+        put _game{players=_players_new}
 
 -------------------------------------------------
 -- AI playing

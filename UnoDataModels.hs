@@ -48,6 +48,7 @@ instance Eq PlayerState where
 
 instance Ord PlayerState where
   _player1 <= _player2 =  score _player1 <= score _player2
+  _player1 > _player2  =  score _player1 > score _player2
 
 data GameState = GameState {
       dir :: Direction

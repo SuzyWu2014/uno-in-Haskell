@@ -120,13 +120,15 @@ doCheckUno _currTurn = do
 
 doCheckGameOver :: Int -> Game()
 doCheckGameOver _currTurn = do
-    game'' <- get 
-    if isWin _currTurn game'' then
+    _game <- get 
+    if isWin _currTurn _game then
         showWinner _currTurn
-    else if null $ deck game'' then do
+    else if null $ deck _game  then do
         lift $ putStrLn "No card in Deck! Calculating scores..." 
-        lift $ print $ showScores $ getScores $ players game''
-        let _winnerId = getWinnerId $ players game''
+        calScores $ players _game
+        _game' <- get
+        lift $ print $ showScores $ getScores $ players _game'
+        let _winnerId = getWinnerId $ players _game'
         showWinner _winnerId
     else do 
         showNextTurn
