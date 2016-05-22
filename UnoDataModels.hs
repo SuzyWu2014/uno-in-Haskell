@@ -41,7 +41,6 @@ data PlayerState =  PlayerState{
     , name :: String
     , score :: Int
     , cardsInHand :: [Card]
-    , isUno :: Bool
 } deriving(Show)
 
 instance Eq PlayerState where

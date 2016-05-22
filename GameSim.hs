@@ -26,7 +26,6 @@ initPlayer _id _name = PlayerState{
     pId          = _id,
     name       = _name,
     cardsInHand = [],
-    isUno       = False,
     score       = 0
 } 
 initRobotPlayers :: Int -> [PlayerState]
@@ -96,24 +95,20 @@ isMatch _currCard _card = case  cardType _card of
             Regular      -> num _card == num _currCard || clr _card == clr _currCard
             _            -> clr _card == clr _currCard
 
-checkUno :: Int -> Bool
-checkUno = undefined
+isUno :: Int -> GameState -> Bool
+isUno _playerId _game = 1 == countPlayerHandCards _playerId _game
 
-declareUno :: PlayerState -> String
-declareUno = undefined
+declareUno :: Game ()
+declareUno = do 
+    _game <- get 
+    let _name = getCurrPlayerName _game
+    if isRobotPlayer _game then
+        lift $ putStrLn $ _name ++ " declares Uno!"
+    else 
+        lift $ putStrLn "You declare uno!"
 
-unoPenalty :: PlayerState -> PlayerState
-unoPenalty = undefined
-
-checkWinner :: PlayerState -> Bool
-checkWinner = undefined
-
-updateScore :: PlayerState -> PlayerState
-updateScore = undefined
 
 -------------------------------------------------
 -- AI playing
 -------------------------------------------------
-
-
 

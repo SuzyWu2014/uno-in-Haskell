@@ -9,17 +9,25 @@ import System.Random
 -- Field Checking
 -------------------------------------------------
 isRobotPlayer :: GameState -> Bool
-isRobotPlayer  game = whoseTurn game /= realPlayer game
+isRobotPlayer  _game = whoseTurn _game /= realPlayer _game
 
 -------------------------------------------------
 -- Info Retrieving
 -------------------------------------------------
 getCurrPlayerName :: GameState -> String
-getCurrPlayerName game = getPlayerName (whoseTurn game) game
+getCurrPlayerName _game = getPlayerName (whoseTurn _game) _game
+
+getCurrPlayerState :: GameState -> PlayerState
+getCurrPlayerState _game = players _game !! whoseTurn _game
+
+-- @Int playerId
+-- @Int #of cards in hand
+countPlayerHandCards :: Int -> GameState -> Int
+countPlayerHandCards _playerId _game = length $ cardsInHand (getPlayerState _playerId _game)
 
 -- @Int Player ID
 getPlayerName :: Int -> GameState -> String
-getPlayerName i game = doGetPlayerName i (players game ) 
+getPlayerName i _game = doGetPlayerName i (players _game ) 
 
 doGetPlayerName :: Int -> [PlayerState] -> String
 doGetPlayerName  _   []                               = "Error"
@@ -27,10 +35,10 @@ doGetPlayerName _playerId (p:ps)  = if pId p == _playerId then name p
                                                       else doGetPlayerName  _playerId ps
 
 getPlayerState :: Int -> GameState -> PlayerState
-getPlayerState _playerId game = players game !! _playerId
+getPlayerState _playerId _game = players _game !! _playerId
 
 getPlayerCards :: Int -> GameState -> [Card]
-getPlayerCards _playerId game = cardsInHand (getPlayerState _playerId game)
+getPlayerCards _playerId _game = cardsInHand (getPlayerState _playerId _game)
 
 -------------------------------------------------
 -- Display
@@ -38,25 +46,25 @@ getPlayerCards _playerId game = cardsInHand (getPlayerState _playerId game)
 showState :: Game ()
 showState = do 
     countTurn
-    game <- get 
+    _game <- get 
     lift $ putStrLn $ "\n" ++"======================== Game Status ============================" ++"\n" 
-    lift $ putStrLn $ "No." ++ show (ithTurn game)  
-    lift $ putStr $ "Current Direction: " ++ showDirection game ++"\n"
-    lift $ putStr $ "Current Card:      " ++ show (currCard game) ++"\n"
+    lift $ putStrLn $ "No." ++ show (ithTurn _game)  
+    lift $ putStr $ "Current Direction: " ++ showDirection _game ++"\n"
+    lift $ putStr $ "Current Card:      " ++ show (currCard _game) ++"\n"
     
 showNextTurn :: Game ()
 showNextTurn = do 
-      game <- get 
-      if isRobotPlayer game then 
-        lift $ putStrLn $ "           => Next turn goes to " ++ getCurrPlayerName game
+      _game <- get 
+      if isRobotPlayer _game then 
+        lift $ putStrLn $ "           => Next turn goes to " ++ getCurrPlayerName _game
       else 
-        lift $ putStrLn $ "           => It's your turn, " ++ getCurrPlayerName game ++ "!" 
+        lift $ putStrLn $ "           => It's your turn, " ++ getCurrPlayerName _game ++ "!" 
 
 showDropCard :: Card -> Game()
 showDropCard _card = do 
-      game <- get 
-      if isRobotPlayer game then
-         lift $ putStrLn $ getCurrPlayerName game ++ " dropped " ++ show _card 
+      _game <- get 
+      if isRobotPlayer _game then
+         lift $ putStrLn $ getCurrPlayerName _game ++ " dropped " ++ show _card 
       else 
          lift $ putStrLn $ "You dropped " ++ show _card
 
@@ -80,7 +88,7 @@ showWinner :: Int -> Game()
 showWinner _winnerId = do 
     _game <- get   
     if realPlayer _game == _winnerId then
-        lift $ putStrLn "Congrats! You win the game!"
+        lift $ putStrLn "Congrats! You win the _game!"
     else 
         lift $ putStrLn $ name (players _game !! _winnerId) ++ " win !!"
 
@@ -113,24 +121,24 @@ countTurn = do
 -- 3. after drawing, deck become empty 
 -- @Int Player
 drawCard :: Int -> GameState -> GameState
-drawCard _ game@GameState{deck=[], players=_players}         = game
-drawCard usr game@GameState{deck=(card:ds), players=_players}  = game{deck=ds, players=p}
+drawCard _ _game@GameState{deck=[], players=_players}         = _game
+drawCard usr _game@GameState{deck=(card:ds), players=_players}  = _game{deck=ds, players=p}
   where
-    u@PlayerState{cardsInHand=_cardsInHand} = players game !! usr
+    u@PlayerState{cardsInHand=_cardsInHand} = players _game !! usr
     p = take usr _players ++ [u{cardsInHand=card:_cardsInHand}] ++
         drop (usr+1) _players
 
 -- First Int: nums of cards to draw
 -- Second Int: playerID
 drawCards :: Int -> Int -> GameState -> GameState
-drawCards 0 _ game = game
-drawCards n usr game = drawCards (n-1) usr (drawCard usr game) 
+drawCards 0 _ _game = _game
+drawCards n usr _game = drawCards (n-1) usr (drawCard usr _game) 
 
 -- @Int next ith turn
 -- @Int playerID of next turn 
 nextTurn :: Int -> GameState -> Int
-nextTurn 0 game= whoseTurn game
-nextTurn i game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = nextTurn (i-1) game{whoseTurn = doGetNextTurn _whoseTurn _players _dir}
+nextTurn 0 _game= whoseTurn _game
+nextTurn i _game@GameState{whoseTurn=_whoseTurn,players=_players,dir=_dir} = nextTurn (i-1) _game{whoseTurn = doGetNextTurn _whoseTurn _players _dir}
 
 -- @int Current turn
 -- @[PlayerState]
@@ -165,7 +173,6 @@ reverseDir CounterClockwise = Clockwise
 -- @Int return number in [0,max]
 randomInt :: Int -> Int
 randomInt n = unsafePerformIO $ getStdRandom $ randomR (0,n-1)
-
 
 helpinfo :: IO ()
 helpinfo = putStr $ unlines 

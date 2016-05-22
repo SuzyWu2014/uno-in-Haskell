@@ -6,7 +6,7 @@ import GameSim
 import CardEffects
 import Control.Monad.Trans
 import Control.Monad.Trans.State
--- import Control.Monad
+import Control.Monad
 
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
@@ -41,13 +41,14 @@ simGame = do
 goPlay :: Game ()
 goPlay = do
     game <- get
-    let currTurn = whoseTurn game
-    let _playableCards = getPlayableCards currTurn game 
+    let _currTurn = whoseTurn game
+    let _playableCards = getPlayableCards _currTurn game 
     if null _playableCards then  
-        doDrawAndPlay currTurn 
+        doDrawAndPlay _currTurn 
     else  
-        doPlayFromHand _playableCards currTurn  
-    doCheckGameOver currTurn 
+        doPlayFromHand _playableCards _currTurn  
+    doCheckUno _currTurn 
+    doCheckGameOver _currTurn
 
 
 -- @Int current player
@@ -109,6 +110,12 @@ askToPick _cards _currTurn= do
     _numStr <- lift getLine
     let _num = read _numStr ::Int
     dropCard (_cards !! (_num-1)) _currTurn
+
+-- @Int PlayerId 
+doCheckUno :: Int -> Game ()
+doCheckUno _currTurn = do 
+     _game <- get 
+     Control.Monad.when (isUno _currTurn _game) declareUno
 
 
 doCheckGameOver :: Int -> Game()
