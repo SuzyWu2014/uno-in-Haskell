@@ -14,11 +14,10 @@ uno = do
     putStrLn "Greetings!  What is your name?"
     _name  <- getLine
     putStrLn $ "Welcome to UNO, " ++ _name ++ "!"
-    putStrLn "How many players would you like to play with? [1-4]"
-    _numStr <- getLine
+    putStrLn "How many players would you like to play with? [1-4]" 
+    _num <- getLineInt 5
     putStrLn "Initializing game..."
-    --run game
-    let _num = read _numStr :: Int
+    --run game 
     let init_state = initGameState _num _name 
        in do
         putStrLn "Starting Game..."  
@@ -82,7 +81,7 @@ askToDrop :: Card -> Int -> Game ()
 askToDrop _card _currTurn = do 
     showAllCardInHand
     lift $ putStrLn $ "No card matched! Draw a card from deck.You get a matched card: " ++ show _card
-    lift $ putStrLn "Would you like to drop it? Enter yes/no"
+    lift $ putStrLn "Would you like to drop it? Enter yes to drop, otherwise will keep it."
     _decision <- lift getLine  
     if  _decision `elem` ["yes","y","YES","Yes"] then 
         dropCard _card _currTurn
@@ -106,8 +105,7 @@ askToPick _cards _currTurn= do
     showAllCardInHand 
     lift $ putStrLn $ "Cards you can drop: " ++ show _cards ++ "\n"
     lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"
-    _numStr <- lift getLine
-    let _num = read _numStr ::Int
+    _num <- lift $ getLineInt $ 1+ length _cards
     dropCard (_cards !! (_num-1)) _currTurn
 
 -- @Int PlayerId 

@@ -114,10 +114,9 @@ pickColor = do
 
 askForColor ::Game ()
 askForColor = do 
-  lift $ putStrLn "Please pick a color to continue: 1-Yellow, 2-Red, 3-Blue, 4-Green"
-  _numStr <- lift getLine
-  let clrInt = read _numStr :: Int
-  let _currClr = colors !! (clrInt-1)
+  lift $ putStrLn "Please pick a color to continue: 1-Yellow, 2-Red, 3-Blue, 4-Green" 
+  _clrInt <- lift $ getLineInt 5
+  let _currClr = colors !! (_clrInt-1)
   setCurrColor _currClr
   lift $ putStrLn $ "You picked " ++ show _currClr ++"!" 
 

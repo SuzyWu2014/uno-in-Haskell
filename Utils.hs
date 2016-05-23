@@ -1,10 +1,11 @@
 module Utils where
 
 import UnoDataModels
-import Control.Monad.State 
+import Control.Monad.State as State
 import System.IO.Unsafe (unsafePerformIO)
 import System.Random
 import Control.Arrow
+import Text.Read as Read
 
 -------------------------------------------------
 -- Field Checking
@@ -42,32 +43,32 @@ getPlayerCards _playerId _game = cardsInHand $ getPlayerState _playerId _game
 showState :: Game ()
 showState = do 
     countTurn
-    _game <- get 
-    lift $ putStrLn $ "\n" ++"======================== Game Status ============================" ++"\n" 
-    lift $ putStrLn $ "No." ++ show (ithTurn _game)  
-    lift $ putStr $ "Current Direction: " ++ showDirection _game ++"\n"
-    lift $ putStr $ "Current Card:      " ++ show (currCard _game) ++"\n"
+    _game <- State.get 
+    State.lift $ putStrLn $ "\n" ++"======================== Game Status ============================" ++"\n" 
+    State.lift $ putStrLn $ "No." ++ show (ithTurn _game)  
+    State.lift $ putStr $ "Current Direction: " ++ showDirection _game ++"\n"
+    State.lift $ putStr $ "Current Card:      " ++ show (currCard _game) ++"\n"
     
 showNextTurn :: Game ()
 showNextTurn = do 
-      _game <- get 
+      _game <- State.get 
       if isRobotPlayer _game then 
-        lift $ putStrLn $ "           => Next turn goes to " ++ getCurrPlayerName _game
+        State.lift $ putStrLn $ "           => Next turn goes to " ++ getCurrPlayerName _game
       else 
-        lift $ putStrLn $ "           => It's your turn, " ++ getCurrPlayerName _game ++ "!" 
+        State.lift $ putStrLn $ "           => It's your turn, " ++ getCurrPlayerName _game ++ "!" 
 
 showDropCard :: Card -> Game()
 showDropCard _card = do 
-      _game <- get 
+      _game <- State.get 
       if isRobotPlayer _game then
-         lift $ putStrLn $ getCurrPlayerName _game ++ " dropped " ++ show _card 
+         State.lift $ putStrLn $ getCurrPlayerName _game ++ " dropped " ++ show _card 
       else 
-         lift $ putStrLn $ "You dropped " ++ show _card
+         State.lift $ putStrLn $ "You dropped " ++ show _card
 
 showAllCardInHand :: Game ()
 showAllCardInHand = do 
-  _game <- get
-  lift $ putStrLn $ "\n"++ "Your cards:         " ++ show (cardsInHand ( players _game !! whoseTurn _game)) ++"\n"
+  _game <- State.get
+  State.lift $ putStrLn $ "\n"++ "Your cards:         " ++ show (cardsInHand ( players _game !! whoseTurn _game)) ++"\n"
 
 
 showDirection :: GameState -> String
@@ -82,11 +83,11 @@ doShowDir (_player:_players) = name _player ++ " -> " ++ doShowDir _players
 -- @Int Winner ID
 showWinner :: Int -> Game()
 showWinner _winnerId = do 
-    _game <- get   
+    _game <- State.get   
     if realPlayer _game == _winnerId then
-        lift $ putStrLn "Congrats! You win the game!"
+        State.lift $ putStrLn "Congrats! You win the game!"
     else 
-        lift $ putStrLn $ name (players _game !! _winnerId) ++ " win !!"
+        State.lift $ putStrLn $ name (players _game !! _winnerId) ++ " win !!"
 
 -------------------------------------------------
 -- Action
@@ -111,7 +112,7 @@ calScore = foldr ((+).num) 0
 
 countTurn :: Game()
 countTurn = do 
-   _game <- get 
+   _game <- State.get 
    let count = ithTurn _game +1
    put _game{ithTurn=count}
 
@@ -182,7 +183,16 @@ helpinfo = putStr $ unlines
            "/help:\t\t\tDisplay this help information dialog"
           ]
 
-
+getLineInt :: Int -> IO Int
+getLineInt _max = do
+      _numStr <- getLine
+      case readMaybe _numStr of
+        Just x -> if x< _max && x >0 then 
+                    return x 
+                  else do
+                    putStrLn "Too large number entered, please enter again:"
+                    getLineInt _max
+        Nothing -> putStrLn "Invalid number entered, please enter again:" >> getLineInt _max
 
 
 
