@@ -66,5 +66,5 @@ type Game = StateT GameState IO
 type Deck = [Card]
 
 playerNames::[String]
-playerNames = ["Alice", "Joe", "Mike", "Emily"]
+playerNames = ["1-Alice", "2-Joe", "3-Mike", "4-Emily"]
 

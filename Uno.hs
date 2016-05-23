@@ -103,7 +103,6 @@ doPlayFromHand _cards _currTurn= do
 
 askToPick :: [Card] -> Int -> Game ()
 askToPick _cards _currTurn= do
-    _game <- get
     showAllCardInHand 
     lift $ putStrLn $ "Cards you can drop: " ++ show _cards ++ "\n"
     lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"

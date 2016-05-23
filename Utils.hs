@@ -28,15 +28,13 @@ getPlayerName :: Int -> GameState -> String
 getPlayerName i _game = doGetPlayerName i (players _game ) 
 
 doGetPlayerName :: Int -> [PlayerState] -> String
-doGetPlayerName  _   []                               = "Error"
-doGetPlayerName _playerId (p:ps)  = if pId p == _playerId then name p
-                                                      else doGetPlayerName  _playerId ps
+doGetPlayerName _playerId _players = name $ _players !! _playerId
 
 getPlayerState :: Int -> GameState -> PlayerState
 getPlayerState _playerId _game = players _game !! _playerId
 
 getPlayerCards :: Int -> GameState -> [Card]
-getPlayerCards _playerId _game = cardsInHand (getPlayerState _playerId _game)
+getPlayerCards _playerId _game = cardsInHand $ getPlayerState _playerId _game
 
 -------------------------------------------------
 -- Display

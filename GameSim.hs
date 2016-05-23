@@ -106,7 +106,3 @@ calScores _players = do
         let _players_new = updateScores _players
         put _game{players=_players_new}
 
--------------------------------------------------
--- AI playing
--------------------------------------------------
-
