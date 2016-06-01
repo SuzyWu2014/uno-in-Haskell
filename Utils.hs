@@ -175,12 +175,31 @@ reverseDir CounterClockwise = Clockwise
 randomInt :: Int -> Int
 randomInt n = unsafePerformIO $ getStdRandom $ randomR (0,n-1)
 
-helpinfo :: IO ()
-helpinfo = putStr $ unlines 
-          ["Helpful Commands:",
-           "/info <Card>:\tDisplay what the card does",
-           "/hand:\t\t\tDisplay cards in your hand",
-           "/help:\t\t\tDisplay this help information dialog"
+helpInfo :: IO ()
+helpInfo = putStr $ unlines 
+          [
+            "Helpful Commands:",
+            "/rule:\t\t\tDisplay some basic rules to play the game",
+            "/info <Card>:\tDisplay what the card does",
+            "/hand:\t\t\tDisplay cards in your hand",
+            "/help:\t\t\tDisplay this help information dialog"
+          ]
+
+ruleInfo :: IO ()
+ruleInfo = putStr $ unlines
+          [
+            "How to play the card game? There are some basic rules to follow:",
+            "1. The aim of the game is to be the first player to play all cards in hand, or",
+            "   to be the player to score the highest points when all cards in the deck are drawn.",
+            "2. The score one player gain is counted by the cards held by the other players.",
+            "   Numbers cards count their face value, all action cards count 20, and Wild and Wild Draw Four cards count 50.",
+            "3. On your turn, you must do one of the following:",
+            "\t play a card matching the discard in color, number or symbol",
+            "\t play a Wild card, or a Wild Draw Four card",
+            "\t draw the top card of the deck",
+            "4. If a player draws a card that is playable, the player has the option of either keeping it or playing it immediately.",
+            "5. When one player calls \"Uno\", it means there is only one card in his/her hand.",
+            "6. In a two-player game, the Reverse card acts like a Skip card, thus the other player misses a turn."
           ]
 
 getLineInt :: Int -> IO Int

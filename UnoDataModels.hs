@@ -8,7 +8,15 @@ data CardType = Skip
               | Wild
               | WildDrawFour
               | Regular  
-              deriving(Show, Eq, Enum)
+              deriving(Eq, Enum)
+
+instance Show CardType where
+  show Skip         = "Next player in sequence misses a turn"
+  show DrawTwo      = "Next player in sequence draws two cards and misses a turn"
+  show Reverse      = "Order of play switches directions"
+  show Wild         = "Player declares next color(any color) to be matched"
+  show WildDrawFour = "Player declares next color to be matched; next player in sequence draws four cards and loses a turn."
+  show _            = "number card"
               
 data Color = Yellow | Red | Blue | Green | PickAColor
             deriving(Show, Eq, Enum)
