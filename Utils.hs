@@ -202,6 +202,24 @@ ruleInfo = putStr $ unlines
             "6. In a two-player game, the Reverse card acts like a Skip card, thus the other player misses a turn."
           ]
 
+prompt :: GameState -> IO String
+prompt game = 
+  do
+    p <- getLine
+    card <- getLineInt 5
+    case p of
+      "/help" -> helpInfo >> redo
+      "/rule" -> ruleInfo >> redo
+      "/list" -> putStrLn "You can use \"/info <card>\" to look up what the specific \
+                          \card does\n There are five cards provided to look up: \
+                          \skip[1], draw two[2], reverse[3], wild[4], wild draw four[5]\n \
+                          \* Just use the number after the card name" >> redo
+      -- "/info "++"1" -> putStrLn $ show card                 
+      _       -> putStrLn "Input \"/help\" to get help information" >> redo
+    where redo = prompt game
+          -- card <- getLineInt
+
+
 getLineInt :: Int -> IO Int
 getLineInt _max = do
       _numStr <- getLine
