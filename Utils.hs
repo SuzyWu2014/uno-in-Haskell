@@ -180,8 +180,7 @@ helpInfo = putStr $ unlines
           [
             "Helpful Commands:",
             "/rule:\t\t\tDisplay some basic rules to play the game",
-            "/info <Card>:\tDisplay what the card does",
-            "/hand:\t\t\tDisplay cards in your hand",
+            "/effect:\t\t\tDisplay what all cards do",
             "/help:\t\t\tDisplay this help information dialog"
           ]
 
@@ -202,34 +201,42 @@ ruleInfo = putStr $ unlines
             "6. In a two-player game, the Reverse card acts like a Skip card, thus the other player misses a turn."
           ]
 
-prompt :: GameState -> IO String
-prompt game = 
-  do
-    p <- getLine
-    card <- getLineInt 5
-    case p of
-      "/help" -> helpInfo >> redo
-      "/rule" -> ruleInfo >> redo
-      "/list" -> putStrLn "You can use \"/info <card>\" to look up what the specific \
-                          \card does\n There are five cards provided to look up: \
-                          \skip[1], draw two[2], reverse[3], wild[4], wild draw four[5]\n \
-                          \* Just use the number after the card name" >> redo
-      -- "/info "++"1" -> putStrLn $ show card                 
-      _       -> putStrLn "Input \"/help\" to get help information" >> redo
-    where redo = prompt game
-          -- card <- getLineInt
+-- prompt :: IO ()
+-- prompt = do
+--     iostring <- getLine
+--     case readMaybe iostring of
 
+
+getHelp :: String -> IO ()
+getHelp p = case p of
+      "/help"   -> helpInfo
+      "/rule"   -> ruleInfo
+      "/effect" -> putStrLn showFuncCard
+      _         -> putStrLn "Input \"/help\" to get help information\n"
+
+showCardDesc :: CardType -> String
+showCardDesc Skip         = "Skip: Next player in sequence misses a turn\n"
+showCardDesc DrawTwo      = "Draw two: Next player in sequence draws two cards and misses a turn\n"
+showCardDesc Reverse      = "Reverse: Order of play switches directions\n"
+showCardDesc Wild         = "Wild: Player declares next color(any color) to be matched\n"
+showCardDesc WildDrawFour = "Wild draw four: Player declares next color to be matched; next player in sequence draws four cards and loses a turn.\n"
+showCardDesc _            = "Regular Card: No effect!\n"
+
+showFuncCard :: String
+showFuncCard = showCardDesc Skip ++ showCardDesc DrawTwo ++ showCardDesc Reverse ++
+              showCardDesc Wild ++ showCardDesc WildDrawFour
 
 getLineInt :: Int -> IO Int
 getLineInt _max = do
+      putStr "> "
       _numStr <- getLine
       case readMaybe _numStr of
-        Just x -> if x< _max && x >0 then 
+        Just x -> if x < _max && x > 0 then 
                     return x 
                   else do
                     putStrLn "Too large number entered, please enter again:"
                     getLineInt _max
-        Nothing -> putStrLn "Invalid number entered, please enter again:" >> getLineInt _max
+        Nothing -> getHelp _numStr >> getLineInt _max
 
 
 

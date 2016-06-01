@@ -105,6 +105,7 @@ askToPick _cards _currTurn= do
     showAllCardInHand 
     lift $ putStrLn $ "Cards you can drop: " ++ show _cards ++ "\n"
     lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"
+    lift $ putStrLn $ "Or you can just input /help to get help information."
     _num <- lift $ getLineInt $ 1+ length _cards
     dropCard (_cards !! (_num-1)) _currTurn
 
