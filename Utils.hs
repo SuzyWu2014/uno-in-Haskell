@@ -4,6 +4,8 @@ import UnoDataModels
 import Control.Monad.State as State
 import System.IO.Unsafe (unsafePerformIO)
 import System.Random
+import System.Posix.Process.ByteString
+import System.Exit
 import Control.Arrow
 import Text.Read as Read
 
@@ -180,8 +182,9 @@ helpInfo = putStr $ unlines
           [
             "Helpful Commands:",
             "/rule:\t\t\tDisplay some basic rules to play the game",
-            "/effect:\t\t\tDisplay what all cards do",
-            "/help:\t\t\tDisplay this help information dialog"
+            "/effect:\t\tDisplay what all cards do",
+            "/help:\t\t\tDisplay this help information dialog",
+            "/quit:\t\t\tExit the game immediately\n"
           ]
 
 ruleInfo :: IO ()
@@ -198,7 +201,7 @@ ruleInfo = putStr $ unlines
             "\t draw the top card of the deck",
             "4. If a player draws a card that is playable, the player has the option of either keeping it or playing it immediately.",
             "5. When one player calls \"Uno\", it means there is only one card in his/her hand.",
-            "6. In a two-player game, the Reverse card acts like a Skip card, thus the other player misses a turn."
+            "6. In a two-player game, the Reverse card acts like a Skip card, thus the other player misses a turn.\n"
           ]
 
 -- prompt :: IO ()
@@ -211,6 +214,7 @@ getHelp :: String -> IO ()
 getHelp p = case p of
       "/help"   -> helpInfo
       "/rule"   -> ruleInfo
+      "/quit"   -> exitImmediately ExitSuccess
       "/effect" -> putStrLn showFuncCard
       _         -> putStrLn "Input \"/help\" to get help information"
 
