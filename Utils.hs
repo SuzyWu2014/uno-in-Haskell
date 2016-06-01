@@ -212,7 +212,7 @@ getHelp p = case p of
       "/help"   -> helpInfo
       "/rule"   -> ruleInfo
       "/effect" -> putStrLn showFuncCard
-      _         -> putStrLn "Input \"/help\" to get help information\n"
+      _         -> putStrLn "Input \"/help\" to get help information"
 
 showCardDesc :: CardType -> String
 showCardDesc Skip         = "Skip: Next player in sequence misses a turn\n"
@@ -220,7 +220,7 @@ showCardDesc DrawTwo      = "Draw two: Next player in sequence draws two cards a
 showCardDesc Reverse      = "Reverse: Order of play switches directions\n"
 showCardDesc Wild         = "Wild: Player declares next color(any color) to be matched\n"
 showCardDesc WildDrawFour = "Wild draw four: Player declares next color to be matched; next player in sequence draws four cards and loses a turn.\n"
-showCardDesc _            = "Regular Card: No effect!\n"
+showCardDesc _            = "Regular Card: No effect!"
 
 showFuncCard :: String
 showFuncCard = showCardDesc Skip ++ showCardDesc DrawTwo ++ showCardDesc Reverse ++
