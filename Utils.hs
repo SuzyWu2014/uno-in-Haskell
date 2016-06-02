@@ -215,6 +215,7 @@ getHelp p = case p of
       "/help"   -> helpInfo
       "/rule"   -> ruleInfo
       "/quit"   -> exitImmediately ExitSuccess
+      -- "/state"  -> execStateT showState
       "/effect" -> putStrLn showFuncCard
       _         -> putStrLn "Input \"/help\" to get help information"
 
