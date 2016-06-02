@@ -11,7 +11,7 @@ import Control.Monad
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
 uno = do
-    putStrLn "Greetings!  What is your name?"
+    putStr $ "Greetings!  What is your name? \n" ++ "> "
     _name  <- getLine
     putStrLn $ "Welcome to UNO, " ++ _name ++ "!"
     putStrLn "How many players would you like to play with? [1-4]" 
@@ -103,7 +103,7 @@ doPlayFromHand _cards _currTurn= do
 askToPick :: [Card] -> Int -> Game ()
 askToPick _cards _currTurn= do
     showAllCardInHand 
-    lift $ putStrLn $ "Cards you can drop: " ++ show _cards ++ "\n"
+    lift $ putStrLn $ "Cards you can drop: \n" ++ showCards _cards
     lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"
     lift $ putStrLn $ "Or you can just input /help to get help information."
     _num <- lift $ getLineInt $ 1+ length _cards

@@ -50,6 +50,10 @@ showState = do
     State.lift $ putStrLn $ "No." ++ show (ithTurn _game)  
     State.lift $ putStr $ "Current Direction: " ++ showDirection _game ++"\n"
     State.lift $ putStr $ "Current Card:      " ++ show (currCard _game) ++"\n"
+
+showCards :: [Card] -> String 
+showCards []             = ""
+showCards (_card:_cards) =  showCards _cards ++ "\n" ++ show (length _cards+1) ++ ": " ++ show _card
     
 showNextTurn :: Game ()
 showNextTurn = do 
