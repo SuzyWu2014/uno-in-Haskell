@@ -8,6 +8,7 @@ import System.Posix.Process.ByteString
 import System.Exit
 import Control.Arrow
 import Text.Read as Read
+import Config
 
 -------------------------------------------------
 -- Field Checking
@@ -49,7 +50,9 @@ showState = do
     State.lift $ putStrLn $ "\n" ++"======================== Game Status ============================" ++"\n" 
     State.lift $ putStrLn $ "No." ++ show (ithTurn _game)  
     State.lift $ putStr $ "Current Direction: " ++ showDirection _game ++"\n"
-    State.lift $ putStr $ "Current Card:      " ++ show (currCard _game) ++"\n"
+    State.lift $ putStr $ "Current Card:      "
+    State.lift $ displayCard $ currCard _game
+    State.lift $ putStr "\n"
 
 showCards :: [Card] -> String 
 showCards []             = ""
@@ -66,16 +69,21 @@ showNextTurn = do
 showDropCard :: Card -> Game()
 showDropCard _card = do 
       _game <- State.get 
-      if isRobotPlayer _game then
-         State.lift $ putStrLn $ getCurrPlayerName _game ++ " dropped " ++ show _card 
-      else 
-         State.lift $ putStrLn $ "You dropped " ++ show _card
+      if isRobotPlayer _game then do
+         State.lift $ putStr $ getCurrPlayerName _game ++ " dropped "
+         State.lift $ displayCard $ _card
+         State.lift $ putStr "\n"
+      else do
+         State.lift $ putStr $ "You dropped "
+         State.lift $ displayCard $ _card
+         State.lift $ putStr "\n"
 
 showAllCardInHand :: Game ()
 showAllCardInHand = do 
   _game <- State.get
-  State.lift $ putStrLn $ "\n"++ "Your cards:         " ++ show (cardsInHand ( players _game !! whoseTurn _game)) ++"\n"
-
+  State.lift $ putStr $ "\n"++ "Your cards:        "
+  State.lift $ displayCards $ (cardsInHand ( players _game !! whoseTurn _game))
+  State.lift $ putStr "\n"
 
 showDirection :: GameState -> String
 showDirection _game 

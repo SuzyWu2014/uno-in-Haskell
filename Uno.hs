@@ -4,13 +4,16 @@ import UnoDataModels
 import Utils 
 import GameSim
 import CardEffects
+import Config
 import Control.Monad.Trans
 import Control.Monad.Trans.State
 import Control.Monad
+import System.Console.ANSI
 
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
 uno = do
+    -- setSGR [SetSwapForegroundBackground True]
     putStr $ "Greetings!  What is your name? \n" ++ "> "
     _name  <- getLine
     putStrLn $ "Welcome to UNO, " ++ _name ++ "!"
@@ -80,7 +83,9 @@ promptNoCardtoDrop _currTurn = do
 askToDrop :: Card -> Int -> Game ()
 askToDrop _card _currTurn = do 
     showAllCardInHand
-    lift $ putStrLn $ "No card matched! Draw a card from deck.You get a matched card: " ++ show _card
+    lift $ putStr $ "No card matched! Draw a card from deck.You get a matched card: "
+    lift $ displayCard $ _card
+    lift $ putStr "\n"
     lift $ putStrLn "Would you like to drop it? Enter yes to drop, otherwise will keep it."
     _decision <- lift getLine  
     if  _decision `elem` ["yes","y","YES","Yes"] then 
@@ -103,7 +108,9 @@ doPlayFromHand _cards _currTurn= do
 askToPick :: [Card] -> Int -> Game ()
 askToPick _cards _currTurn= do
     showAllCardInHand 
-    lift $ putStrLn $ "Cards you can drop: \n" ++ showCards _cards
+    lift $ putStr $ "Cards you can drop: \n"
+    lift $ displayCs $ _cards
+    lift $ putStr "\n"
     lift $ putStrLn $ "Please pick one card to drop: (enter 1 - " ++ show (length _cards ) ++ ")"
     lift $ putStrLn $ "Or you can just input /help to get help information."
     _num <- lift $ getLineInt $ 1+ length _cards

@@ -5,6 +5,7 @@ import Utils
 import Control.Monad.Trans
 import Control.Monad.Trans.State
 import Data.List
+import System.Console.ANSI
 
 -- Every time when player drops a card, set the GameState.currCard to the droped card, then apply the card effect
 dropCard :: Card -> Int -> Game ()

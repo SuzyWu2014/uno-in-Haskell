@@ -1,6 +1,7 @@
 module UnoDataModels where
 
 import Control.Monad.State
+import System.Console.ANSI (Color(Black, Red, Green, Yellow, Blue, Magenta, Cyan, White))
 
 data CardType = Skip  
               | DrawTwo  
@@ -10,8 +11,8 @@ data CardType = Skip
               | Regular  
               deriving(Show, Eq, Enum)
               
-data Color = Yellow | Red | Blue | Green | PickAColor
-            deriving(Show, Eq, Enum)
+-- data Color = Yellow | Red | Blue | Green | PickAColor
+--             deriving(Show, Eq, Enum)
             
 colors :: [Color]
 colors = [Yellow, Red, Blue, Green]
@@ -27,11 +28,13 @@ data Card = Card { num :: Int
 } deriving(Eq)
 
 instance Show Card where
-  show (Card nm cr t _) 
-      | nm <= 9                    =  " "++show t ++ "("++show nm++", "++show cr++")"  
-      | t == Skip || t == Reverse || t == DrawTwo  = " "++  show t ++ "(" ++ show cr ++")"
-      | otherwise                  =  " "++show t
-
+  -- show (Card nm cr t _) 
+  --     | nm <= 9                    =  " "++show t ++ "("++show nm++", "++show cr++")"  
+  --     | t == Skip || t == Reverse || t == DrawTwo  = " "++  show t ++ "(" ++ show cr ++")"
+  --     | otherwise                  =  " "++show t
+  show (Card val color ctype _)
+      | ctype == Regular = "|"++show val++"|"
+      | otherwise       = "|"++show ctype++"|"
 
 data Direction = Clockwise | CounterClockwise
                 deriving(Show, Eq)    
