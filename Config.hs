@@ -16,26 +16,26 @@ displayCs cs = do
     displayCs' 1 cs
     setSGR [Reset]
     setSGR [SetColor Foreground Dull White]
-    where displayCs' n [] = putStr "\n"
-          displayCs' n (c:cs) = do
-              displayC n c
-              displayCs' (n + 1) cs
+    where displayCs' _ []     = putStr "\n"
+          displayCs' n (c:xs) = do
+                    displayC n c
+                    displayCs' (n + 1) xs
 
 displayC :: Int -> Card -> IO ()
-displayC n (Card value color ct d) = do
+displayC n (Card value color ct _) = do
     putStr $ show n ++ ":"
     setSGR [SetColor Foreground Vivid color]
     case ct of
         Regular -> putStrLn $ "|"++show value ++"|"
-        otherwise -> putStrLn $ "|"++show ct ++"|"
+        _ -> putStrLn $ "|"++show ct ++"|"
     setSGR [SetColor Foreground Dull White]
 
 displayCard :: Card -> IO ()
-displayCard (Card value color ct d) = do
+displayCard (Card value color ct _) = do
     setSGR [SetColor Foreground Vivid color]
     case ct of
-        Regular -> putStr $ "|"++show value ++"|"
-        otherwise -> putStr $ "|"++show ct ++"|"
+        Regular   -> putStr $ "|"++show value ++"|"
+        _ -> putStr $ "|"++show ct ++"|"
     setSGR [SetColor Foreground Dull White]
 
 displayCards :: [Card] -> IO ()

@@ -1,7 +1,7 @@
 module UnoDataModels where
 
 import Control.Monad.State
-import System.Console.ANSI (Color(Black, Red, Green, Yellow, Blue, Magenta, Cyan, White))
+import System.Console.ANSI(Color(Black, Red, Green, Yellow, Blue, Magenta, Cyan, White))
 
 data CardType = Skip  
               | DrawTwo  
@@ -32,7 +32,7 @@ instance Show Card where
   --     | nm <= 9                    =  " "++show t ++ "("++show nm++", "++show cr++")"  
   --     | t == Skip || t == Reverse || t == DrawTwo  = " "++  show t ++ "(" ++ show cr ++")"
   --     | otherwise                  =  " "++show t
-  show (Card val color ctype _)
+  show (Card val _ ctype _)
       | ctype == Regular = "|"++show val++"|"
       | otherwise       = "|"++show ctype++"|"
 

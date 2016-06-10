@@ -8,7 +8,6 @@ import Config
 import Control.Monad.Trans
 import Control.Monad.Trans.State
 import Control.Monad
-import System.Console.ANSI
 
 -- TO-DO: guard() to make sure # of player is [1-4]
 uno :: IO ()
