@@ -1,7 +1,7 @@
 module UnoDataModels where
 
 import Control.Monad.State
-import System.Console.ANSI(Color(Black, Red, Green, Yellow, Blue, Magenta, Cyan, White))
+import System.Console.ANSI(Color(Red, Green, Yellow, Blue))
 
 data CardType = Skip  
               | DrawTwo  
